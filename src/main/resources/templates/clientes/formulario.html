@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Clientes - VetControl Perú</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background: #f3f6f9;
+        }
+
+        .encabezado {
+            background: #146c63;
+            color: white;
+            padding: 22px;
+            border-radius: 12px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .obligatorio {
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <div class="encabezado mb-4">
+        <h2>
+            <i class="fa-solid fa-paw"></i>
+            VetControl Perú
+        </h2>
+        <p class="mb-0">
+            Sistema de Gestión Veterinaria
+        </p>
+    </div>
+
+    <div class="card shadow-lg">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <h3>
+                        <i class="fa-solid fa-user-pen text-success"></i>
+
+                        <span th:text="${modoEdicion} ? 'Editar cliente' : 'Registrar nuevo cliente'">
+                            Formulario del cliente
+                        </span>
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Datos del propietario de la mascota
+                    </p>
+                </div>
+
+                <a th:href="@{/clientes}"
+                   class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Regresar
+                </a>
+
+            </div>
+
+            <!-- ERROR GENERAL -->
+            <div th:if="${mensajeError}"
+                 th:text="${mensajeError}"
+                 class="alert alert-danger">
+            </div>
+
+            <!-- IMPORTANTE:
+                 TODAS LAS VALIDACIONES #fields
+                 ESTAN DENTRO DE ESTE FORMULARIO -->
+
+            <form id="formCliente"
+                  th:object="${clienteDTO}"
+                  th:action="${modoEdicion} ? @{/clientes/{id}/actualizar(id=${clienteDTO.idCliente})} : @{/clientes/guardar}"
+                  method="post">
+
+                <!-- RESUMEN DE ERRORES -->
+                <div th:if="${#fields.hasErrors('*')}"
+                     class="alert alert-warning">
+
+                    <strong>
+                        Revise los siguientes datos:
+                    </strong>
+
+                    <ul class="mb-0 mt-2">
+
+                        <li th:each="error : ${#fields.errors('*')}"
+                            th:text="${error}">
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- TIPO DE DOCUMENTO -->
+                    <div class="col-md-4">
+
+                        <label for="tipoDocumento"
+                               class="form-label">
+
+                            Tipo de documento
+                            <span class="obligatorio">*</span>
+                        </label>
+
+                        <select id="tipoDocumento"
+                                th:field="*{tipoDocumento}"
+                                class="form-select"
+                                th:classappend="${#fields.hasErrors('tipoDocumento')} ? 'is-invalid' : ''"
+                                required>
+
+                            <option value="">Seleccionar</option>
+                            <option value="DNI">DNI</option>
+                            <option value="RUC">RUC</option>
+                            <option value="CE">Carné de extranjería</option>
+                            <option value="PASAPORTE">Pasaporte</option>
+
+                        </select>
+
+                        <div th:if="${#fields.hasErrors('tipoDocumento')}"
+                             th:errors="*{tipoDocumento}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- NUMERO DE DOCUMENTO -->
+                    <div class="col-md-4">
+
+                        <label for="nroDocumento"
+                               class="form-label">
+
+                            Número de documento
+                            <span class="obligatorio">*</span>
+                        </label>
+
+                        <input id="nroDocumento"
+                               type="text"
+                               th:field="*{nroDocumento}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('nroDocumento')} ? 'is-invalid' : ''"
+                               maxlength="20"
+                               required>
+
+                        <div th:if="${#fields.hasErrors('nroDocumento')}"
+                             th:errors="*{nroDocumento}"
+                             class="invalid-feedback">
+                        </div>
+
+                        <div id="ayudaDocumento"
+                             class="form-text">
+                            Ingrese el documento correspondiente.
+                        </div>
+
+                    </div>
+
+                    <!-- CELULAR -->
+                    <div class="col-md-4">
+
+                        <label for="celular"
+                               class="form-label">
+                            Celular
+                        </label>
+
+                        <input id="celular"
+                               type="tel"
+                               th:field="*{celular}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('celular')} ? 'is-invalid' : ''"
+                               maxlength="20">
+
+                        <div th:if="${#fields.hasErrors('celular')}"
+                             th:errors="*{celular}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- NOMBRES O RAZON SOCIAL -->
+                    <div class="col-md-6">
+
+                        <label for="nombresRazonSocial"
+                               class="form-label">
+
+                            Nombres / Razón social
+                            <span class="obligatorio">*</span>
+                        </label>
+
+                        <input id="nombresRazonSocial"
+                               type="text"
+                               th:field="*{nombresRazonSocial}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('nombresRazonSocial')} ? 'is-invalid' : ''"
+                               maxlength="150"
+                               required>
+
+                        <div th:if="${#fields.hasErrors('nombresRazonSocial')}"
+                             th:errors="*{nombresRazonSocial}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- APELLIDOS -->
+                    <div class="col-md-6">
+
+                        <label for="apellidos"
+                               class="form-label">
+                            Apellidos
+                        </label>
+
+                        <input id="apellidos"
+                               type="text"
+                               th:field="*{apellidos}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid' : ''"
+                               maxlength="100">
+
+                        <div th:if="${#fields.hasErrors('apellidos')}"
+                             th:errors="*{apellidos}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- CORREO -->
+                    <div class="col-md-6">
+
+                        <label for="correo"
+                               class="form-label">
+                            Correo electrónico
+                        </label>
+
+                        <input id="correo"
+                               type="email"
+                               th:field="*{correo}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
+                               maxlength="120">
+
+                        <div th:if="${#fields.hasErrors('correo')}"
+                             th:errors="*{correo}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- DIRECCION -->
+                    <div class="col-md-6">
+
+                        <label for="direccion"
+                               class="form-label">
+                            Dirección
+                        </label>
+
+                        <input id="direccion"
+                               type="text"
+                               th:field="*{direccion}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('direccion')} ? 'is-invalid' : ''"
+                               maxlength="200">
+
+                        <div th:if="${#fields.hasErrors('direccion')}"
+                             th:errors="*{direccion}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <p th:if="${!modoEdicion}"
+                   class="text-muted">
+
+                    El nuevo cliente se registrará con estado
+                    <strong>Activo</strong>.
+                </p>
+
+                <p th:if="${modoEdicion}"
+                   class="text-muted">
+
+                    Se conservarán el ID, el estado y
+                    la fecha de registro.
+                </p>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end gap-2">
+
+                    <button type="reset"
+                            class="btn btn-outline-secondary">
+
+                        <i class="fa-solid fa-broom"></i>
+                        Limpiar cambios
+                    </button>
+
+                    <a th:href="@{/clientes}"
+                       class="btn btn-outline-danger">
+                        Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        <span th:text="${modoEdicion} ? 'Guardar cambios' : 'Guardar cliente'">
+                            Guardar
+                        </span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const formulario = document.getElementById('formCliente');
+    const tipo = document.getElementById('tipoDocumento');
+    const documento = document.getElementById('nroDocumento');
+    const ayuda = document.getElementById('ayudaDocumento');
+
+    function configurarDocumento() {
+
+        documento.removeAttribute('pattern');
+        documento.maxLength = 20;
+        documento.inputMode = 'text';
+
+        if (tipo.value === 'DNI') {
+
+            documento.maxLength = 8;
+            documento.pattern = '[0-9]{8}';
+            documento.inputMode = 'numeric';
+
+            ayuda.textContent =
+                'El DNI debe tener exactamente 8 dígitos.';
+
+        } else if (tipo.value === 'RUC') {
+
+            documento.maxLength = 11;
+            documento.pattern = '[0-9]{11}';
+            documento.inputMode = 'numeric';
+
+            ayuda.textContent =
+                'El RUC debe tener exactamente 11 dígitos.';
+
+        } else {
+
+            ayuda.textContent =
+                'Ingrese el documento correspondiente.';
+        }
+    }
+
+    tipo.addEventListener('change', function () {
+
+        documento.value = '';
+        configurarDocumento();
+    });
+
+    formulario.addEventListener('reset', function () {
+
+        setTimeout(configurarDocumento, 0);
+    });
+
+    configurarDocumento();
+
+    formulario.addEventListener('submit', function (evento) {
+
+        if (!formulario.checkValidity()) {
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            return;
+        }
+
+        evento.preventDefault();
+
+        Swal.fire({
+            title: '¿Guardar información?',
+            text: 'Los datos se guardarán en VetControl Perú.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#146c63',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+
+        }).then(function (respuesta) {
+
+            if (respuesta.isConfirmed) {
+
+                HTMLFormElement.prototype.submit.call(
+                    formulario
+                );
+            }
+        });
+
+    });
+
+});
+</script>
+
+</body>
+</html>

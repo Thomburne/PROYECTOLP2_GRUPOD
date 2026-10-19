@@ -1,0 +1,1000 @@
+
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Citas Veterinarias | VetControl Perú</title>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- DATATABLES -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
+
+    <style>
+        :root {
+            --azul: #123e63;
+            --turquesa: #168f99;
+            --fondo: #eef5f8;
+            --texto: #173b59;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            color: var(--texto);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .aplicacion {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* MENU LATERAL */
+
+        .menu-lateral {
+            width: 255px;
+            flex-shrink: 0;
+            padding: 24px 14px;
+            background: linear-gradient(
+                180deg, #123e63, #176b77
+            );
+            color: white;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 15px 0 30px;
+            border-bottom: 1px solid #ffffff35;
+            margin-bottom: 24px;
+        }
+
+        .logo i {
+            font-size: 40px;
+            color: #77dfd7;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 12px 0 4px;
+        }
+
+        .logo h2 span {
+            color: #76dfd8;
+        }
+
+        .logo p {
+            letter-spacing: 5px;
+            color: #b4ece7;
+            margin: 0;
+        }
+
+        .nav-link-vet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: white;
+            text-decoration: none;
+            border-radius: 11px;
+        }
+
+        .nav-link-vet:hover,
+        .nav-link-vet.activo {
+            background: #ffffff28;
+            color: white;
+        }
+
+        .nav-link-vet.pendiente {
+            opacity: .6;
+            cursor: default;
+        }
+
+        .btn-salir {
+            width: 100%;
+            border: none;
+            background: #bb3943;
+            color: white;
+            text-align: left;
+            padding: 14px 15px;
+            border-radius: 10px;
+            margin-top: 27px;
+        }
+
+        .btn-salir:hover {
+            background: #982e37;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+
+        .principal {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 22px 30px;
+            box-shadow: 0 2px 12px #0000000a;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .contenido {
+            max-width: 1550px;
+            padding: 30px;
+            margin: auto;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e0eaf0;
+            padding: 26px;
+            box-shadow: 0 6px 22px #123e6310;
+        }
+
+        .titulo-modulo {
+            font-size: 29px;
+            font-weight: 700;
+            color: #143f62;
+        }
+
+        .subtitulo {
+            color: #71869a;
+            font-size: 14px;
+        }
+
+        .filtros {
+            background: #f5f9fb;
+            border: 1px solid #e0eaf0;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .filtros h5 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        .table thead th {
+            background: #16486b;
+            color: white;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+        }
+
+        .acciones {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+            min-width: 95px;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #146c63;
+            white-space: nowrap;
+        }
+
+        .total-citas {
+            display: inline-block;
+            background: #d8f7e8;
+            color: #13734c;
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .btn-vet {
+            background: #177acb;
+            color: white;
+            border: none;
+        }
+
+        .btn-vet:hover {
+            background: #0e5b98;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .aplicacion {
+                flex-direction: column;
+            }
+
+            .menu-lateral {
+                width: 100%;
+            }
+
+            .contenido {
+                padding: 18px;
+            }
+
+            .cabecera {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tarjeta {
+                padding: 16px;
+            }
+
+            .titulo-modulo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENU LATERAL -->
+
+    <aside class="menu-lateral">
+
+        <div class="logo">
+            <i class="fa-solid fa-paw"></i>
+            <h2>Vet<span>Control</span></h2>
+            <p>PERÚ</p>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}"
+               class="nav-link-vet">
+                <i class="fa-solid fa-house"></i>
+                Inicio
+            </a>
+
+            <a th:href="@{/clientes}"
+               class="nav-link-vet">
+                <i class="fa-solid fa-users"></i>
+                Clientes
+            </a>
+
+            <a th:href="@{/mascotas}"
+               class="nav-link-vet">
+                <i class="fa-solid fa-paw"></i>
+                Mascotas
+            </a>
+
+            <a th:href="@{/citas}"
+               class="nav-link-vet activo"
+               aria-current="page">
+                <i class="fa-solid fa-calendar-check"></i>
+                Citas
+            </a>
+
+            <span class="nav-link-vet pendiente">
+                <i class="fa-solid fa-stethoscope"></i>
+                Servicios (en desarrollo)
+            </span>
+
+            <form th:action="@{/logout}"
+                  method="post">
+
+                <button type="submit"
+                        class="btn-salir">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Cerrar sesión
+                </button>
+
+            </form>
+
+        </nav>
+
+    </aside>
+
+    <!-- PANEL PRINCIPAL -->
+
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>
+                <i class="fa-solid fa-calendar-days text-info"></i>
+                Gestión de Citas
+            </h1>
+
+            <a th:href="@{/dashboard}"
+               class="btn btn-outline-primary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver al Dashboard
+            </a>
+
+        </header>
+
+        <main class="contenido">
+
+            <section class="tarjeta">
+
+                <!-- TITULO Y NAVEGACION -->
+
+                <div class="row align-items-center mb-4 g-3">
+
+                    <div class="col-lg-6">
+
+                        <h2 class="titulo-modulo">
+                            Listado de Citas
+                        </h2>
+
+                        <p th:if="${mascotaSeleccionada == null}"
+                           class="subtitulo mb-0">
+                            Consulta, seguimiento y
+                            programación de citas veterinarias.
+                        </p>
+
+                        <p th:if="${mascotaSeleccionada != null}"
+                           class="subtitulo mb-0">
+
+                            Historial de:
+
+                            <strong th:text="${mascotaSeleccionada.nombre}">
+                                Mascota
+                            </strong>
+
+                            | Propietario:
+
+                            <span th:text="${mascotaSeleccionada.cliente.nombresRazonSocial}">
+                                Propietario
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-lg-6 text-lg-end">
+
+                        <a th:href="@{/clientes}"
+                           class="btn btn-outline-secondary mb-2">
+                            <i class="fa-solid fa-users"></i>
+                            Clientes
+                        </a>
+
+                        <a th:href="@{/mascotas}"
+                           class="btn btn-outline-primary mb-2">
+                            <i class="fa-solid fa-paw"></i>
+                            Mascotas
+                        </a>
+
+                        <a th:href="@{/citas}"
+                           class="btn btn-outline-primary mb-2">
+                            <i class="fa-solid fa-list"></i>
+                            Todas
+                        </a>
+
+                        <a th:if="${mascotaSeleccionada == null}"
+                           th:href="@{/citas/nuevo}"
+                           class="btn btn-success mb-2">
+                            <i class="fa-solid fa-plus"></i>
+                            Nueva cita
+                        </a>
+
+                        <a th:if="${mascotaSeleccionada != null}"
+                           th:href="@{/citas/nuevo(mascotaId=${mascotaSeleccionada.idMascota})}"
+                           class="btn btn-success mb-2">
+                            <i class="fa-solid fa-plus"></i>
+                            Nueva cita
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- MENSAJES -->
+
+                <div id="mensajeExito"
+                     th:if="${mensajeExito}"
+                     th:text="${mensajeExito}"
+                     class="d-none">
+                </div>
+
+                <div id="mensajeError"
+                     th:if="${mensajeError}"
+                     th:text="${mensajeError}"
+                     class="d-none">
+                </div>
+
+                <!-- TOTAL DE CITAS -->
+
+                <div class="mb-4">
+
+                    <span class="total-citas"
+                          th:text="${#lists.size(citas)} + ' citas registradas'">
+                        0 citas registradas
+                    </span>
+
+                </div>
+
+                <!-- FILTROS -->
+
+                <div class="filtros mb-4">
+
+                    <h5>
+                        <i class="fa-solid fa-filter"></i>
+                        Filtros de búsqueda
+                    </h5>
+
+                    <div class="row g-3 align-items-end">
+
+                        <!-- ESTADO -->
+
+                        <div class="col-md-3">
+
+                            <label for="filtroEstado"
+                                   class="form-label">
+                                Estado
+                            </label>
+
+                            <select id="filtroEstado"
+                                    class="form-select">
+
+                                <option value="">Todos</option>
+                                <option value="PENDIENTE">
+                                    Pendiente
+                                </option>
+                                <option value="CONFIRMADA">
+                                    Confirmada
+                                </option>
+                                <option value="ATENDIDA">
+                                    Atendida
+                                </option>
+                                <option value="CANCELADA">
+                                    Cancelada
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- SERVICIO -->
+
+                        <div class="col-md-3">
+
+                            <label for="filtroServicio"
+                                   class="form-label">
+                                Servicio
+                            </label>
+
+                            <select id="filtroServicio"
+                                    class="form-select">
+
+                                <option value="">Todos</option>
+
+                                <option
+                                    th:each="cita : ${citas}"
+                                    th:if="${cita.servicioVeterinario != null}"
+                                    th:value="${cita.servicioVeterinario.nombre}"
+                                    th:text="${cita.servicioVeterinario.nombre}">
+                                    Servicio
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- BUSQUEDA -->
+
+                        <div class="col-md-4">
+
+                            <label for="busquedaGeneral"
+                                   class="form-label">
+                                Buscar cita
+                            </label>
+
+                            <input id="busquedaGeneral"
+                                   type="search"
+                                   class="form-control"
+                                   placeholder="Mascota, propietario, motivo...">
+
+                        </div>
+
+                        <!-- LIMPIAR -->
+
+                        <div class="col-md-2">
+
+                            <button id="btnLimpiar"
+                                    type="button"
+                                    class="btn btn-outline-secondary w-100">
+
+                                <i class="fa-solid fa-broom"></i>
+                                Limpiar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TABLA DE CITAS -->
+
+                <div class="tabla-contenedor">
+
+                    <table id="tablaCitas"
+                           class="table table-bordered table-striped table-hover align-middle w-100">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha / Hora</th>
+                                <th>Mascota</th>
+                                <th>Propietario</th>
+                                <th>Servicio veterinario</th>
+                                <th>Precio</th>
+                                <th>Duración</th>
+                                <th>Motivo</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="cita : ${citas}">
+
+                                <!-- ID -->
+
+                                <td th:text="${cita.idCita}">
+                                    1
+                                </td>
+
+                                <!-- FECHA Y HORA -->
+
+                                <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}"
+                                    th:attr="data-order=${#temporals.format(cita.fechaHora, 'yyyyMMddHHmm')}">
+                                    Fecha
+                                </td>
+
+                                <!-- MASCOTA -->
+
+                                <td>
+
+                                    <a th:href="@{/citas/mascota/{id}(id=${cita.mascota.idMascota})}"
+                                       th:text="${cita.mascota.nombre}"
+                                       class="text-decoration-none">
+                                        Mascota
+                                    </a>
+
+                                </td>
+
+                                <!-- PROPIETARIO -->
+
+                                <td>
+
+                                    <span th:text="${cita.mascota.cliente.nombresRazonSocial}">
+                                        Nombre
+                                    </span>
+
+                                    <span th:text="${cita.mascota.cliente.apellidos}">
+                                        Apellidos
+                                    </span>
+
+                                </td>
+
+                                <!-- SERVICIO -->
+
+                                <td th:attr="data-search=${cita.servicioVeterinario != null ? cita.servicioVeterinario.nombre : cita.servicio}">
+
+                                    <span th:if="${cita.servicioVeterinario != null}"
+                                          th:text="${cita.servicioVeterinario.nombre}">
+                                        Servicio veterinario
+                                    </span>
+
+                                    <span th:if="${cita.servicioVeterinario == null}"
+                                          th:text="${cita.servicio}">
+                                        Servicio anterior
+                                    </span>
+
+                                </td>
+
+                                <!-- PRECIO -->
+
+                                <td class="precio text-end">
+
+                                    <span th:if="${cita.servicioVeterinario != null}"
+                                          th:text="${'S/ ' + cita.servicioVeterinario.precioReferencial}">
+                                        S/ 0.00
+                                    </span>
+
+                                    <span th:if="${cita.servicioVeterinario == null}">
+                                        -
+                                    </span>
+
+                                </td>
+
+                                <!-- DURACION -->
+
+                                <td class="text-center">
+
+                                    <span th:if="${cita.servicioVeterinario != null and cita.servicioVeterinario.duracionMinutos != null}"
+                                          th:text="${cita.servicioVeterinario.duracionMinutos + ' min'}">
+                                        30 min
+                                    </span>
+
+                                    <span th:unless="${cita.servicioVeterinario != null and cita.servicioVeterinario.duracionMinutos != null}">
+                                        -
+                                    </span>
+
+                                </td>
+
+                                <!-- MOTIVO -->
+
+                                <td th:text="${cita.motivo}">
+                                    Motivo
+                                </td>
+
+                                <!-- ESTADO -->
+
+                                <td class="text-center"
+                                    th:attr="data-search=${cita.estado}">
+
+                                    <span class="badge"
+                                          th:classappend="${cita.estado == 'PENDIENTE'} ? 'bg-warning text-dark' : (${cita.estado == 'CONFIRMADA'} ? 'bg-primary' : (${cita.estado == 'ATENDIDA'} ? 'bg-success' : 'bg-secondary'))"
+                                          th:text="${cita.estado}">
+                                        PENDIENTE
+                                    </span>
+
+                                </td>
+
+                                <!-- ACCIONES -->
+
+                                <td>
+
+                                    <div class="acciones">
+
+                                        <!-- EDITAR -->
+
+                                        <a th:href="@{/citas/{id}/editar(id=${cita.idCita})}"
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="Editar cita"
+                                           aria-label="Editar cita">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </a>
+
+                                        <!-- CAMBIAR ESTADO -->
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-success btnEstado"
+                                                th:attr="data-url=@{/citas/{id}/estado(id=${cita.idCita})},data-estado=${cita.estado}"
+                                                title="Cambiar estado"
+                                                aria-label="Cambiar estado">
+
+                                            <i class="fa-solid fa-arrows-rotate"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- LEYENDA -->
+
+                <div class="mt-3 text-muted small">
+
+                    <strong>Acciones:</strong>
+
+                    <span class="me-3">
+                        <i class="fa-solid fa-pen text-primary"></i>
+                        Editar
+                    </span>
+
+                    <span>
+                        <i class="fa-solid fa-arrows-rotate text-success"></i>
+                        Cambiar estado
+                    </span>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+<!-- FORMULARIO DE CAMBIO DE ESTADO -->
+<!-- Thymeleaf genera el token CSRF para el POST -->
+
+<form id="formCambioEstado"
+      th:action="@{/citas}"
+      method="post"
+      class="d-none">
+
+    <input type="hidden"
+           name="estado"
+           id="nuevoEstado">
+
+</form>
+
+<!-- LIBRERIAS -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // MENSAJES DEL CONTROLADOR
+
+    const mensajeExito =
+        document.getElementById("mensajeExito");
+
+    const mensajeError =
+        document.getElementById("mensajeError");
+
+    if (typeof Swal !== "undefined") {
+
+        if (mensajeExito) {
+            Swal.fire({
+                icon: "success",
+                title: "Operación exitosa",
+                text: mensajeExito.textContent.trim(),
+                confirmButtonColor: "#168f99"
+            });
+        }
+
+        if (mensajeError) {
+            Swal.fire({
+                icon: "error",
+                title: "No se pudo completar",
+                text: mensajeError.textContent.trim()
+            });
+        }
+    }
+
+    // CAMBIO DE ESTADO DE CITAS
+
+    const formularioEstado =
+        document.getElementById("formCambioEstado");
+
+    const nuevoEstado =
+        document.getElementById("nuevoEstado");
+
+    const estados = [
+        "PENDIENTE",
+        "CONFIRMADA",
+        "ATENDIDA",
+        "CANCELADA"
+    ];
+
+    document.addEventListener("click", function (evento) {
+
+        const boton =
+            evento.target.closest(".btnEstado");
+
+        if (!boton || typeof Swal === "undefined") {
+            return;
+        }
+
+        const opciones = {};
+
+        estados.forEach(function (estado) {
+            opciones[estado] = estado;
+        });
+
+        Swal.fire({
+            title: "Cambiar estado de la cita",
+            input: "select",
+            inputOptions: opciones,
+            inputValue: boton.getAttribute("data-estado"),
+            showCancelButton: true,
+            confirmButtonColor: "#168f99",
+            confirmButtonText: "Guardar",
+            cancelButtonText: "Cancelar",
+            inputValidator: function (value) {
+                if (!value) {
+                    return "Seleccione un estado";
+                }
+            }
+        }).then(function (resultado) {
+
+            if (!resultado.isConfirmed) {
+                return;
+            }
+
+            formularioEstado.action =
+                boton.getAttribute("data-url");
+
+            nuevoEstado.value = resultado.value;
+
+            HTMLFormElement.prototype.submit.call(
+                formularioEstado
+            );
+        });
+    });
+
+    // EVITAR SERVICIOS REPETIDOS EN EL SELECT
+
+    const filtroServicio =
+        document.getElementById("filtroServicio");
+
+    const serviciosVistos = new Set();
+
+    Array.from(filtroServicio.options)
+        .slice(1)
+        .forEach(function (opcion) {
+
+            const nombre = opcion.value.trim();
+
+            if (serviciosVistos.has(nombre)) {
+                opcion.remove();
+            } else {
+                serviciosVistos.add(nombre);
+            }
+        });
+
+    // DATATABLES
+
+    if (typeof DataTable === "undefined") {
+        console.error(
+            "DataTables no está disponible"
+        );
+        return;
+    }
+
+    const tabla = new DataTable("#tablaCitas", {
+
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+
+        // ORDENAR POR FECHA MAS RECIENTE
+        order: [Array.of(1, "desc")],
+
+        layout: {
+            topStart: "pageLength",
+            topEnd: null,
+            bottomStart: "info",
+            bottomEnd: "paging"
+        },
+
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ citas",
+            infoEmpty: "Sin citas",
+            infoFiltered: "(filtradas de _MAX_ citas)",
+            zeroRecords: "No se encontraron resultados",
+            emptyTable: "No hay citas registradas",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        },
+
+        columnDefs: [{
+            targets: 9,
+            orderable: false,
+            searchable: false
+        }]
+    });
+
+    // FILTROS
+
+    const filtroEstado =
+        document.getElementById("filtroEstado");
+
+    const busquedaGeneral =
+        document.getElementById("busquedaGeneral");
+
+    const btnLimpiar =
+        document.getElementById("btnLimpiar");
+
+    function filtrar() {
+
+        tabla.column(8).search(
+            filtroEstado.value,
+            { exact: true }
+        );
+
+        tabla.column(4).search(
+            filtroServicio.value,
+            { exact: true }
+        );
+
+        tabla.search(
+            busquedaGeneral.value.trim()
+        );
+
+        tabla.draw();
+    }
+
+    filtroEstado.addEventListener(
+        "change", filtrar
+    );
+
+    filtroServicio.addEventListener(
+        "change", filtrar
+    );
+
+    busquedaGeneral.addEventListener(
+        "input", filtrar
+    );
+
+    // LIMPIAR FILTROS
+
+    btnLimpiar.addEventListener("click", function () {
+
+        filtroEstado.value = "";
+        filtroServicio.value = "";
+        busquedaGeneral.value = "";
+
+        tabla.search("");
+        tabla.columns().search("");
+        tabla.draw();
+    });
+
+    console.log(
+        "VetControl Perú: módulo Citas inicializado"
+    );
+
+});
+</script>
+
+</body>
+</html>

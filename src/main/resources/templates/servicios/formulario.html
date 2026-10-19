@@ -1,0 +1,614 @@
+
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Formulario de Servicios | VetControl Perú</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --azul: #143e60;
+            --turquesa: #168e98;
+            --fondo: #edf5f8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            color: #173b59;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .aplicacion {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .menu {
+            width: 255px;
+            flex-shrink: 0;
+            padding: 24px 14px;
+            color: white;
+            background: linear-gradient(180deg, #143e60, #176a78);
+        }
+
+        .marca {
+            text-align: center;
+            padding: 15px 0 28px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #ffffff35;
+        }
+
+        .marca i {
+            font-size: 40px;
+            color: #7ce1d9;
+        }
+
+        .marca h2 {
+            font-size: 25px;
+            font-weight: 700;
+            margin: 12px 0 3px;
+        }
+
+        .marca h2 span { color: #7ce1d9; }
+
+        .marca small {
+            color: #b8ebe8;
+            letter-spacing: 5px;
+        }
+
+        .enlace-menu {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 15px;
+            margin-bottom: 8px;
+            border-radius: 11px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .enlace-menu:hover,
+        .enlace-menu.activo {
+            color: white;
+            background: #ffffff28;
+        }
+
+        .salir {
+            background: #bb3943;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 14px;
+            margin-top: 25px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .principal {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cabecera {
+            background: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px #0000000a;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .contenido {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .tarjeta {
+            background: white;
+            border: 1px solid #e0eaf0;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 6px 22px #123e6310;
+        }
+
+        .titulo {
+            color: var(--azul);
+            font-weight: 700;
+        }
+
+        .seccion {
+            background: #f5f9fb;
+            border: 1px solid #dce9ee;
+            border-radius: 13px;
+            padding: 22px;
+            margin-top: 25px;
+        }
+
+        .seccion h5 {
+            color: var(--azul);
+            font-weight: 700;
+        }
+
+        .form-label {
+            color: #234a68;
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 9px;
+            padding: 11px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--turquesa);
+            box-shadow: 0 0 0 .2rem #168e9825;
+        }
+
+        .obligatorio { color: #d63746; }
+
+        .botones {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-guardar {
+            background: #168e98;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 24px;
+        }
+
+        .btn-guardar:hover {
+            background: #106f77;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .aplicacion { flex-direction: column; }
+            .menu { width: 100%; }
+            .cabecera { flex-wrap: wrap; padding: 18px; }
+            .contenido { padding: 15px; }
+            .tarjeta { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENU -->
+    <aside class="menu">
+
+        <div class="marca">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <h2>Vet<span>Control</span></h2>
+            <small>PERÚ</small>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}"
+               class="enlace-menu">
+                <i class="fa-solid fa-house"></i>
+                Inicio
+            </a>
+
+            <a th:href="@{/clientes}"
+               class="enlace-menu">
+                <i class="fa-solid fa-users"></i>
+                Clientes
+            </a>
+
+            <a th:href="@{/mascotas}"
+               class="enlace-menu">
+                <i class="fa-solid fa-paw"></i>
+                Mascotas
+            </a>
+
+            <a th:href="@{/citas}"
+               class="enlace-menu">
+                <i class="fa-solid fa-calendar-check"></i>
+                Citas
+            </a>
+
+            <a th:href="@{/servicios}"
+               class="enlace-menu activo">
+                <i class="fa-solid fa-stethoscope"></i>
+                Servicios
+            </a>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="salir">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Cerrar sesión
+                </button>
+            </form>
+
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>
+                <i class="fa-solid fa-stethoscope text-info"></i>
+                Gestión de Servicios
+            </h1>
+
+            <a th:href="@{/servicios}"
+               class="btn btn-outline-primary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver al Listado
+            </a>
+
+        </header>
+
+        <main class="contenido">
+
+            <section class="tarjeta">
+
+                <h2 class="titulo"
+                    th:text="${modoEdicion} ? 'Editar Servicio Veterinario' : 'Registrar Servicio Veterinario'">
+                    Registrar Servicio Veterinario
+                </h2>
+
+                <p class="text-secondary">
+                    Complete la información del servicio.
+                    Los campos con asterisco son obligatorios.
+                </p>
+
+                <!-- ERROR GENERAL -->
+                <div id="mensajeError"
+                     th:if="${mensajeError}"
+                     th:text="${mensajeError}"
+                     class="alert alert-danger">
+                </div>
+
+                <!-- FORMULARIO -->
+                <form id="formServicio"
+                      th:action="@{/servicios/guardar}"
+                      th:object="${servicioDTO}"
+                      method="post">
+
+                    <!-- ID NECESARIO PARA EDITAR -->
+                    <input type="hidden"
+                           th:field="*{idServicio}">
+
+                    <!-- ESTADO INFORMATIVO -->
+                    <!-- El estado se controla desde el listado -->
+
+                    <div class="seccion">
+
+                        <h5 class="mb-4">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                            Datos del servicio
+                        </h5>
+
+                        <div class="row g-4">
+
+                            <!-- NOMBRE -->
+                            <div class="col-md-6">
+
+                                <label for="nombre"
+                                       class="form-label">
+                                    Nombre
+                                    <span class="obligatorio">*</span>
+                                </label>
+
+                                <input type="text"
+                                       id="nombre"
+                                       th:field="*{nombre}"
+                                       th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''"
+                                       class="form-control"
+                                       maxlength="100"
+                                       required
+                                       placeholder="Ej. Consulta general">
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('nombre')}"
+                                     th:errors="*{nombre}">
+                                    Nombre incorrecto
+                                </div>
+
+                            </div>
+
+                            <!-- CATEGORIA -->
+                            <div class="col-md-6">
+
+                                <label for="categoria"
+                                       class="form-label">
+                                    Categoría
+                                    <span class="obligatorio">*</span>
+                                </label>
+
+                                <select id="categoria"
+                                        th:field="*{categoria}"
+                                        th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid' : ''"
+                                        class="form-select"
+                                        required>
+
+                                    <option value="">
+                                        Seleccione una categoría
+                                    </option>
+
+                                    <option th:each="categoria : ${categorias}"
+                                            th:value="${categoria}"
+                                            th:text="${categoria == 'BANIO' ? 'BAÑO' :
+                                                     (categoria == 'VACUNACION' ? 'VACUNACIÓN' :
+                                                     (categoria == 'ESTERILIZACION' ? 'ESTERILIZACIÓN' :
+                                                     (categoria == 'CIRUGIA' ? 'CIRUGÍA' :
+                                                     (categoria == 'DESPARASITACION' ? 'DESPARASITACIÓN' :
+                                                     (categoria == 'PELUQUERIA' ? 'PELUQUERÍA' :
+                                                     (categoria == 'HOSPITALIZACION' ? 'HOSPITALIZACIÓN' : categoria))))))}">
+                                        Categoría
+                                    </option>
+
+                                </select>
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('categoria')}"
+                                     th:errors="*{categoria}">
+                                    Categoría incorrecta
+                                </div>
+
+                                <small class="text-secondary">
+                                    La categoría se guarda con su
+                                    valor permitido por MySQL.
+                                </small>
+
+                            </div>
+
+                            <!-- DESCRIPCION -->
+                            <div class="col-12">
+
+                                <label for="descripcion"
+                                       class="form-label">
+                                    Descripción
+                                </label>
+
+                                <textarea id="descripcion"
+                                          th:field="*{descripcion}"
+                                          th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''"
+                                          class="form-control"
+                                          maxlength="500"
+                                          rows="4"
+                                          placeholder="Descripción del servicio"></textarea>
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('descripcion')}"
+                                     th:errors="*{descripcion}">
+                                    Descripción incorrecta
+                                </div>
+
+                                <small class="text-secondary">
+                                    Máximo 500 caracteres.
+                                </small>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- PRECIO Y DURACION -->
+                    <div class="seccion">
+
+                        <h5 class="mb-4">
+                            <i class="fa-solid fa-coins"></i>
+                            Precio y duración
+                        </h5>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <label for="precioReferencial"
+                                       class="form-label">
+                                    Precio referencial (S/)
+                                    <span class="obligatorio">*</span>
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+                                        S/
+                                    </span>
+
+                                    <input type="number"
+                                           id="precioReferencial"
+                                           th:field="*{precioReferencial}"
+                                           th:classappend="${#fields.hasErrors('precioReferencial')} ? 'is-invalid' : ''"
+                                           class="form-control"
+                                           min="0"
+                                           max="99999999.99"
+                                           step="0.01"
+                                           required
+                                           placeholder="50.00">
+
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('precioReferencial')}"
+                                         th:errors="*{precioReferencial}">
+                                        Precio incorrecto
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label for="duracionMinutos"
+                                       class="form-label">
+                                    Duración aproximada (minutos)
+                                </label>
+
+                                <div class="input-group">
+
+                                    <input type="number"
+                                           id="duracionMinutos"
+                                           th:field="*{duracionMinutos}"
+                                           th:classappend="${#fields.hasErrors('duracionMinutos')} ? 'is-invalid' : ''"
+                                           class="form-control"
+                                           min="1"
+                                           step="1"
+                                           placeholder="30">
+
+                                    <span class="input-group-text">
+                                        min
+                                    </span>
+
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('duracionMinutos')}"
+                                         th:errors="*{duracionMinutos}">
+                                        Duración incorrecta
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ESTADO -->
+                    <div class="seccion">
+
+                        <h5>
+                            <i class="fa-solid fa-circle-check"></i>
+                            Estado del servicio
+                        </h5>
+
+                        <p th:if="${modoEdicion}" class="mb-0">
+                            Estado actual:
+                            <strong th:text="${servicioDTO.activo == true ? 'Activo' : 'Inactivo'}">
+                                Activo
+                            </strong>
+                        </p>
+
+                        <p th:unless="${modoEdicion}" class="mb-0">
+                            El servicio nuevo se registrará como activo.
+                        </p>
+
+                        <small class="text-secondary">
+                            Para activar o desactivar un servicio
+                            utiliza los botones del listado.
+                        </small>
+
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="botones">
+
+                        <a th:href="@{/servicios}"
+                           class="btn btn-outline-secondary px-4">
+                            <i class="fa-solid fa-xmark"></i>
+                            Cancelar
+                        </a>
+
+                        <button type="submit"
+                                id="btnGuardar"
+                                class="btn btn-guardar">
+
+                            <i class="fa-solid fa-floppy-disk"></i>
+
+                            <span th:text="${modoEdicion} ? 'Guardar Cambios' : 'Registrar Servicio'">
+                                Registrar Servicio
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- SWEETALERT2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const formulario =
+        document.getElementById("formServicio");
+
+    const btnGuardar =
+        document.getElementById("btnGuardar");
+
+    formulario.addEventListener("submit", function (evento) {
+
+        if (!formulario.checkValidity()) {
+            return;
+        }
+
+        if (typeof Swal === "undefined") {
+            return;
+        }
+
+        evento.preventDefault();
+
+        Swal.fire({
+            title: "¿Desea guardar el servicio?",
+            text: "Verifique que todos los datos sean correctos.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#168e98",
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Sí, guardar"
+        }).then(function (resultado) {
+
+            if (resultado.isConfirmed) {
+                btnGuardar.disabled = true;
+                HTMLFormElement.prototype.submit.call(formulario);
+            }
+        });
+    });
+
+    const mensajeError =
+        document.getElementById("mensajeError");
+
+    if (mensajeError && typeof Swal !== "undefined") {
+        Swal.fire({
+            icon: "error",
+            title: "No se pudo guardar",
+            text: mensajeError.textContent.trim()
+        });
+    }
+});
+</script>
+
+</body>
+</html>

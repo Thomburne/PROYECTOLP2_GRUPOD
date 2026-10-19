@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Clientes | VetControl Perú</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- DataTables 2 -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css">
+
+    <style>
+        :root {
+            --azul: #123e63;
+            --turquesa: #168f99;
+            --fondo: #eef5f8;
+            --texto: #163958;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            color: var(--texto);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .aplicacion {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* MENU */
+
+        .menu-lateral {
+            width: 255px;
+            flex-shrink: 0;
+            background: linear-gradient(
+                180deg, #123e63, #176b77
+            );
+            color: white;
+            padding: 24px 14px;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 15px 0 30px;
+            border-bottom: 1px solid #ffffff35;
+            margin-bottom: 24px;
+        }
+
+        .logo i {
+            font-size: 40px;
+            color: #77dfd7;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            margin: 12px 0 4px;
+            font-weight: bold;
+        }
+
+        .logo h2 span {
+            color: #76dfd8;
+        }
+
+        .logo p {
+            margin: 0;
+            letter-spacing: 5px;
+            color: #b4ece7;
+        }
+
+        .nav-link-vet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: white;
+            text-decoration: none;
+            border-radius: 11px;
+        }
+
+        .nav-link-vet:hover,
+        .nav-link-vet.activo {
+            background: #ffffff28;
+            color: white;
+        }
+
+        .nav-link-vet.pendiente {
+            opacity: .6;
+            cursor: default;
+        }
+
+        .btn-salir {
+            width: 100%;
+            border: none;
+            background: #bb3943;
+            color: white;
+            text-align: left;
+            padding: 14px 15px;
+            border-radius: 10px;
+            margin-top: 27px;
+        }
+
+        .btn-salir:hover {
+            background: #982e37;
+        }
+
+        /* CONTENIDO */
+
+        .principal {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cabecera {
+            background: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 12px #0000000a;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .contenido {
+            max-width: 1550px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e0eaf0;
+            padding: 26px;
+            box-shadow: 0 6px 22px #123e6310;
+        }
+
+        .titulo-seccion {
+            font-weight: bold;
+            color: var(--azul);
+            margin-bottom: 5px;
+        }
+
+        .subtitulo {
+            color: #728698;
+            font-size: 14px;
+        }
+
+        .btn-vet {
+            background: #177acb;
+            color: white;
+            border: none;
+        }
+
+        .btn-vet:hover {
+            background: #0e5b98;
+            color: white;
+        }
+
+        .filtros {
+            background: #f5f9fb;
+            border: 1px solid #e0eaf0;
+            padding: 20px;
+            border-radius: 13px;
+            margin: 25px 0;
+        }
+
+        .filtros h5 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        .table thead th {
+            background: #16486b;
+            color: white;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+        }
+
+        .badge-activo {
+            background: #d6f8e7;
+            color: #157347;
+            padding: 7px 12px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .badge-inactivo {
+            background: #fce0e0;
+            color: #ad3838;
+            padding: 7px 12px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .acciones {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .acciones form {
+            margin: 0;
+        }
+
+        @media (max-width: 900px) {
+            .aplicacion {
+                flex-direction: column;
+            }
+
+            .menu-lateral {
+                width: 100%;
+            }
+
+            .cabecera {
+                padding: 18px;
+            }
+
+            .contenido {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tarjeta {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENU PRINCIPAL -->
+    <aside class="menu-lateral">
+
+        <div class="logo">
+            <i class="bi bi-heart-pulse-fill"></i>
+            <h2>Vet<span>Control</span></h2>
+            <p>PERÚ</p>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}"
+               class="nav-link-vet">
+                <i class="bi bi-house-door"></i>
+                Inicio
+            </a>
+
+            <a th:href="@{/clientes}"
+               class="nav-link-vet activo"
+               aria-current="page">
+                <i class="bi bi-people-fill"></i>
+                Clientes
+            </a>
+
+            <a th:href="@{/mascotas}"
+               class="nav-link-vet">
+                <i class="bi bi-heart-fill"></i>
+                Mascotas
+            </a>
+
+            <a th:href="@{/citas}"
+               class="nav-link-vet">
+                <i class="bi bi-calendar-check"></i>
+                Citas
+            </a>
+
+            <span class="nav-link-vet pendiente">
+                <i class="bi bi-bandaid"></i>
+                Servicios (en desarrollo)
+            </span>
+
+            <form th:action="@{/logout}"
+                  method="post">
+
+                <button type="submit"
+                        class="btn-salir">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Cerrar sesión
+                </button>
+            </form>
+
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>
+                <i class="bi bi-people-fill text-info"></i>
+                Gestión de Clientes
+            </h1>
+
+            <a th:href="@{/dashboard}"
+               class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i>
+                Volver al Dashboard
+            </a>
+
+        </header>
+
+        <main class="contenido">
+
+            <section class="tarjeta">
+
+                <div class="d-flex flex-wrap
+                            justify-content-between
+                            align-items-center gap-3">
+
+                    <div>
+                        <h2 class="titulo-seccion">
+                            Listado de Clientes
+                        </h2>
+
+                        <p class="subtitulo">
+                            Administra los propietarios
+                            registrados en VetControl Perú.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/clientes/nuevo}"
+                       class="btn btn-vet">
+                        <i class="bi bi-person-plus"></i>
+                        Nuevo Cliente
+                    </a>
+
+                </div>
+
+                <!-- MENSAJES DEL CONTROLADOR -->
+
+                <div id="mensajeExito"
+                     th:if="${mensajeExito}"
+                     th:text="${mensajeExito}"
+                     class="d-none">
+                </div>
+
+                <div id="mensajeError"
+                     th:if="${mensajeError}"
+                     th:text="${mensajeError}"
+                     class="d-none">
+                </div>
+
+                <!-- FILTROS -->
+
+                <div class="filtros">
+
+                    <h5>
+                        <i class="bi bi-funnel"></i>
+                        Filtros de búsqueda
+                    </h5>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-4">
+                            <label for="filtroDocumento"
+                                   class="form-label">
+                                Tipo de documento
+                            </label>
+
+                            <select id="filtroDocumento"
+                                    class="form-select">
+                                <option value="">
+                                    Todos
+                                </option>
+                                <option value="DNI">DNI</option>
+                                <option value="RUC">RUC</option>
+                                <option value="CE">CE</option>
+                                <option value="PASAPORTE">
+                                    PASAPORTE
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="filtroEstado"
+                                   class="form-label">
+                                Estado
+                            </label>
+
+                            <select id="filtroEstado"
+                                    class="form-select">
+                                <option value="">
+                                    Todos
+                                </option>
+                                <option value="Activo">
+                                    Activo
+                                </option>
+                                <option value="Inactivo">
+                                    Inactivo
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="buscarCliente"
+                                   class="form-label">
+                                Buscar cliente
+                            </label>
+
+                            <input type="search"
+                                   id="buscarCliente"
+                                   class="form-control"
+                                   placeholder="Nombre, documento, celular...">
+                        </div>
+
+                        <div class="col-12">
+                            <button type="button"
+                                    id="btnLimpiar"
+                                    class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Limpiar filtros
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TABLA DE CLIENTES -->
+
+                <div class="tabla-contenedor">
+
+                    <table id="tablaClientes"
+                           class="table table-striped
+                                  table-hover table-bordered
+                                  align-middle w-100">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Documento</th>
+                                <th>Nombres / Razón social</th>
+                                <th>Apellidos</th>
+                                <th>Celular</th>
+                                <th>Correo</th>
+                                <th>Dirección</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="cliente : ${clientes}">
+
+                                <td th:text="${cliente.idCliente}">
+                                </td>
+
+                                <td th:text="${cliente.tipoDocumento}">
+                                </td>
+
+                                <td th:text="${cliente.nroDocumento}">
+                                </td>
+
+                                <td th:text="${cliente.nombresRazonSocial}">
+                                </td>
+
+                                <td th:text="${cliente.apellidos}">
+                                </td>
+
+                                <td th:text="${cliente.celular}">
+                                </td>
+
+                                <td th:text="${cliente.correo}">
+                                </td>
+
+                                <td th:text="${cliente.direccion}">
+                                </td>
+
+                                <td>
+                                    <span th:if="${cliente.activo == true}"
+                                          class="badge-activo">
+                                        Activo
+                                    </span>
+
+                                    <span th:unless="${cliente.activo == true}"
+                                          class="badge-inactivo">
+                                        Inactivo
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="acciones">
+
+                                        <!-- EDITAR -->
+
+                                        <a th:href="@{/clientes/{id}/editar(
+                                                id=${cliente.idCliente})}"
+                                           class="btn btn-warning btn-sm"
+                                           title="Editar cliente">
+                                            <i class="bi bi-pencil-square"></i>
+                                            Editar
+                                        </a>
+
+                                        <!-- CAMBIAR ESTADO -->
+
+                                        <form class="formEstado"
+                                              th:action="@{/clientes/{id}/cambiar-estado(
+                                                id=${cliente.idCliente})}"
+                                              method="post">
+
+                                            <input type="hidden"
+                                                   class="estadoActual"
+                                                   th:value="${cliente.activo == true}
+                                                        ? 'Activo'
+                                                        : 'Inactivo'">
+
+                                            <button type="submit"
+                                                    class="btn btn-sm"
+                                                    th:classappend="${cliente.activo == true}
+                                                        ? 'btn-danger'
+                                                        : 'btn-success'">
+
+                                                <span th:if="${cliente.activo == true}">
+                                                    Desactivar
+                                                </span>
+
+                                                <span th:unless="${cliente.activo == true}">
+                                                    Activar
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // MENSAJES
+
+    const mensajeExito =
+        document.getElementById("mensajeExito");
+
+    const mensajeError =
+        document.getElementById("mensajeError");
+
+    if (mensajeExito && typeof Swal !== "undefined") {
+        Swal.fire({
+            icon: "success",
+            title: "Operación exitosa",
+            text: mensajeExito.textContent.trim(),
+            confirmButtonColor: "#168f99"
+        });
+    }
+
+    if (mensajeError && typeof Swal !== "undefined") {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: mensajeError.textContent.trim()
+        });
+    }
+
+    // CONFIRMACION CAMBIAR ESTADO
+
+    document.querySelectorAll(".formEstado")
+        .forEach(function (formulario) {
+
+            formulario.addEventListener(
+                "submit",
+                function (evento) {
+
+                    if (typeof Swal === "undefined") {
+                        return;
+                    }
+
+                    evento.preventDefault();
+
+                    const estado =
+                        formulario.querySelector(
+                            ".estadoActual"
+                        ).value;
+
+                    const accion =
+                        estado === "Activo"
+                        ? "desactivar"
+                        : "activar";
+
+                    Swal.fire({
+                        title: "¿Desea " + accion +
+                               " este cliente?",
+                        text: "El registro no será eliminado.",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: "#168f99",
+                        cancelButtonColor: "#6c757d",
+                        confirmButtonText: "Sí, confirmar",
+                        cancelButtonText: "Cancelar"
+                    }).then(function (resultado) {
+
+                        if (resultado.isConfirmed) {
+                            HTMLFormElement.prototype.submit.call(
+                                formulario
+                            );
+                        }
+
+                    });
+                }
+            );
+        });
+
+    // DATATABLES
+
+    if (typeof DataTable === "undefined") {
+        console.error(
+            "No se pudo cargar DataTables."
+        );
+        return;
+    }
+
+    const tabla = new DataTable(
+        "#tablaClientes",
+        {
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+
+            // Compatible con Thymeleaf
+            order: [Array.of(0, "desc")],
+
+            layout: {
+                topStart: "pageLength",
+                topEnd: null,
+                bottomStart: "info",
+                bottomEnd: "paging"
+            },
+
+            language: {
+                decimal: "",
+                emptyTable: "No existen clientes registrados",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ clientes",
+                infoEmpty: "No hay clientes disponibles",
+                infoFiltered: "(filtrados de _MAX_ clientes)",
+                lengthMenu: "Mostrar _MENU_ registros",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                search: "Buscar:",
+                zeroRecords: "No se encontraron resultados",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            }
+        }
+    );
+
+    const filtroDocumento =
+        document.getElementById("filtroDocumento");
+
+    const filtroEstado =
+        document.getElementById("filtroEstado");
+
+    const buscarCliente =
+        document.getElementById("buscarCliente");
+
+    const btnLimpiar =
+        document.getElementById("btnLimpiar");
+
+    // BUSQUEDA POR DOCUMENTO
+
+    filtroDocumento.addEventListener(
+        "change",
+        function () {
+            tabla.column(1)
+                 .search(this.value, {exact: true})
+                 .draw();
+        }
+    );
+
+    // BUSQUEDA POR ESTADO
+
+    filtroEstado.addEventListener(
+        "change",
+        function () {
+            tabla.column(8)
+                 .search(this.value, {exact: true})
+                 .draw();
+        }
+    );
+
+    // BUSQUEDA GENERAL
+
+    buscarCliente.addEventListener(
+        "input",
+        function () {
+            tabla.search(this.value).draw();
+        }
+    );
+
+    // LIMPIAR FILTROS
+
+    btnLimpiar.addEventListener(
+        "click",
+        function () {
+
+            filtroDocumento.value = "";
+            filtroEstado.value = "";
+            buscarCliente.value = "";
+
+            tabla.search("");
+
+            tabla.column(1).search("");
+            tabla.column(8).search("");
+
+            tabla.draw();
+        }
+    );
+
+});
+</script>
+
+</body>
+</html>

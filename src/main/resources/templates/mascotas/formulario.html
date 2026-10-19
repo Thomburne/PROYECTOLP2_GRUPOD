@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Formulario Mascotas - VetControl Perú</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background: #f3f6f9;
+        }
+
+        .encabezado {
+            background: #146c63;
+            color: white;
+            padding: 22px;
+            border-radius: 12px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .obligatorio {
+            color: #dc3545;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <div class="encabezado mb-4">
+
+        <h2>
+            <i class="fa-solid fa-paw"></i>
+            VetControl Perú
+        </h2>
+
+        <p class="mb-0">
+            Sistema de Gestión Veterinaria
+        </p>
+
+    </div>
+
+    <div class="card shadow-lg">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between
+                        align-items-center mb-4">
+
+                <div>
+
+                    <h3>
+
+                        <i class="fa-solid fa-paw text-success"></i>
+
+                        <span th:text="${modoEdicion}
+                            ? 'Editar mascota'
+                            : 'Registrar nueva mascota'">
+                            Formulario de mascota
+                        </span>
+
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Información de la mascota y su propietario
+                    </p>
+
+                </div>
+
+                <a th:href="@{/mascotas}"
+                   class="btn btn-outline-secondary">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Regresar
+
+                </a>
+
+            </div>
+
+            <!-- MENSAJE DE ERROR GENERAL -->
+            <div th:if="${mensajeError}"
+                 th:text="${mensajeError}"
+                 class="alert alert-danger">
+            </div>
+
+            <!-- FORMULARIO CON DTO -->
+            <form id="formMascota"
+                  th:object="${mascotaDTO}"
+                  th:action="${modoEdicion}
+                      ? @{/mascotas/{id}/actualizar(id=${mascotaDTO.idMascota})}
+                      : @{/mascotas/guardar}"
+                  method="post">
+
+                <!-- VALIDACIONES: DENTRO DEL FORM -->
+                <div th:if="${#fields.hasErrors('*')}"
+                     class="alert alert-warning">
+
+                    <strong>
+                        Revise los siguientes datos:
+                    </strong>
+
+                    <ul class="mb-0 mt-2">
+
+                        <li th:each="error : ${#fields.errors('*')}"
+                            th:text="${error}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- PROPIETARIO -->
+                    <div class="col-12">
+
+                        <label for="clienteId"
+                               class="form-label">
+
+                            Propietario
+                            <span class="obligatorio">*</span>
+
+                        </label>
+
+                        <select id="clienteId"
+                                th:field="*{clienteId}"
+                                class="form-select"
+                                th:classappend="${#fields.hasErrors('clienteId')}
+                                    ? 'is-invalid' : ''"
+                                required>
+
+                            <option value="">
+                                Seleccione un propietario
+                            </option>
+
+                            <option th:each="cliente : ${clientes}"
+                                    th:value="${cliente.idCliente}"
+                                    th:disabled="${cliente.activo != true and (mascotaDTO.clienteId == null or cliente.idCliente != mascotaDTO.clienteId)}"
+                                    th:text="${cliente.nroDocumento
+                                        + ' - '
+                                        + cliente.nombresRazonSocial
+                                        + ' '
+                                        + (cliente.apellidos == null ? '' : cliente.apellidos)
+                                        + (cliente.activo == true ? '' : ' (Inactivo)')}">
+                                Propietario
+                            </option>
+
+                        </select>
+
+                        <div th:if="${#fields.hasErrors('clienteId')}"
+                             th:errors="*{clienteId}"
+                             class="invalid-feedback">
+                        </div>
+
+                        <div class="form-text">
+                            Para registrar mascotas nuevas,
+                            selecciona un cliente activo.
+                        </div>
+
+                    </div>
+
+                    <!-- NOMBRE -->
+                    <div class="col-md-6">
+
+                        <label for="nombre"
+                               class="form-label">
+
+                            Nombre de la mascota
+                            <span class="obligatorio">*</span>
+
+                        </label>
+
+                        <input id="nombre"
+                               type="text"
+                               th:field="*{nombre}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('nombre')}
+                                   ? 'is-invalid' : ''"
+                               maxlength="80"
+                               required
+                               placeholder="Ejemplo: Luna">
+
+                        <div th:if="${#fields.hasErrors('nombre')}"
+                             th:errors="*{nombre}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- ESPECIE -->
+                    <div class="col-md-6">
+
+                        <label for="especie"
+                               class="form-label">
+
+                            Especie
+                            <span class="obligatorio">*</span>
+
+                        </label>
+
+                        <select id="especie"
+                                th:field="*{especie}"
+                                class="form-select"
+                                th:classappend="${#fields.hasErrors('especie')}
+                                    ? 'is-invalid' : ''"
+                                required>
+
+                            <option value="">Seleccionar</option>
+
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ave">Ave</option>
+                            <option value="Conejo">Conejo</option>
+                            <option value="Otro">Otro</option>
+
+                        </select>
+
+                        <div th:if="${#fields.hasErrors('especie')}"
+                             th:errors="*{especie}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- RAZA -->
+                    <div class="col-md-6">
+
+                        <label for="raza"
+                               class="form-label">
+                            Raza
+                        </label>
+
+                        <input id="raza"
+                               type="text"
+                               th:field="*{raza}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('raza')}
+                                   ? 'is-invalid' : ''"
+                               maxlength="80"
+                               placeholder="Ejemplo: Labrador">
+
+                        <div th:if="${#fields.hasErrors('raza')}"
+                             th:errors="*{raza}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- SEXO -->
+                    <div class="col-md-6">
+
+                        <label for="sexo"
+                               class="form-label">
+
+                            Sexo
+                            <span class="obligatorio">*</span>
+
+                        </label>
+
+                        <select id="sexo"
+                                th:field="*{sexo}"
+                                class="form-select"
+                                th:classappend="${#fields.hasErrors('sexo')}
+                                    ? 'is-invalid' : ''"
+                                required>
+
+                            <option value="">Seleccionar</option>
+                            <option value="M">Macho</option>
+                            <option value="H">Hembra</option>
+
+                        </select>
+
+                        <div th:if="${#fields.hasErrors('sexo')}"
+                             th:errors="*{sexo}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- FECHA DE NACIMIENTO -->
+                    <div class="col-md-6">
+
+                        <label for="fechaNacimiento"
+                               class="form-label">
+                            Fecha de nacimiento
+                        </label>
+
+                        <input id="fechaNacimiento"
+                               type="date"
+                               th:field="*{fechaNacimiento}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('fechaNacimiento')}
+                                   ? 'is-invalid' : ''">
+
+                        <div th:if="${#fields.hasErrors('fechaNacimiento')}"
+                             th:errors="*{fechaNacimiento}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- PESO -->
+                    <div class="col-md-6">
+
+                        <label for="pesoKg"
+                               class="form-label">
+                            Peso en kilogramos
+                        </label>
+
+                        <input id="pesoKg"
+                               type="number"
+                               th:field="*{pesoKg}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('pesoKg')}
+                                   ? 'is-invalid' : ''"
+                               min="0.01"
+                               max="9999.99"
+                               step="0.01"
+                               placeholder="Ejemplo: 8.50">
+
+                        <div th:if="${#fields.hasErrors('pesoKg')}"
+                             th:errors="*{pesoKg}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- COLOR -->
+                    <div class="col-md-6">
+
+                        <label for="color"
+                               class="form-label">
+                            Color
+                        </label>
+
+                        <input id="color"
+                               type="text"
+                               th:field="*{color}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('color')}
+                                   ? 'is-invalid' : ''"
+                               maxlength="60"
+                               placeholder="Ejemplo: Blanco">
+
+                        <div th:if="${#fields.hasErrors('color')}"
+                             th:errors="*{color}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                    <!-- MICROCHIP -->
+                    <div class="col-md-6">
+
+                        <label for="nroMicrochip"
+                               class="form-label">
+                            Número de microchip
+                        </label>
+
+                        <input id="nroMicrochip"
+                               type="text"
+                               th:field="*{nroMicrochip}"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('nroMicrochip')}
+                                   ? 'is-invalid' : ''"
+                               maxlength="50"
+                               placeholder="Opcional">
+
+                        <div th:if="${#fields.hasErrors('nroMicrochip')}"
+                             th:errors="*{nroMicrochip}"
+                             class="invalid-feedback">
+                        </div>
+
+                        <div class="form-text">
+                            Si se registra un microchip,
+                            no debe repetirse.
+                        </div>
+
+                    </div>
+
+                    <!-- OBSERVACIONES -->
+                    <div class="col-12">
+
+                        <label for="observaciones"
+                               class="form-label">
+                            Observaciones
+                        </label>
+
+                        <textarea id="observaciones"
+                                  th:field="*{observaciones}"
+                                  class="form-control"
+                                  th:classappend="${#fields.hasErrors('observaciones')}
+                                      ? 'is-invalid' : ''"
+                                  rows="3"
+                                  maxlength="500"
+                                  placeholder="Información adicional de la mascota"></textarea>
+
+                        <div th:if="${#fields.hasErrors('observaciones')}"
+                             th:errors="*{observaciones}"
+                             class="invalid-feedback">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <div th:if="${modoEdicion}"
+                     class="alert alert-info">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Al editar, se conservará el estado
+                    actual de la mascota.
+
+                </div>
+
+                <p th:if="${!modoEdicion}"
+                   class="text-muted">
+
+                    La nueva mascota se registrará como
+                    <strong>Activo</strong>.
+
+                </p>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end gap-2">
+
+                    <button type="reset"
+                            class="btn btn-outline-secondary">
+
+                        <i class="fa-solid fa-broom"></i>
+                        Limpiar cambios
+
+                    </button>
+
+                    <a th:href="@{/mascotas}"
+                       class="btn btn-outline-danger">
+
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        <span th:text="${modoEdicion}
+                            ? 'Guardar cambios'
+                            : 'Guardar mascota'">
+                            Guardar
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const formulario =
+        document.getElementById('formMascota');
+
+    const fechaNacimiento =
+        document.getElementById('fechaNacimiento');
+
+    // Evitar fechas futuras desde el navegador
+    const hoy = new Date();
+    const fechaLocal = new Date(
+        hoy.getTime() - hoy.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    fechaNacimiento.max = fechaLocal;
+
+    formulario.addEventListener('submit', function (evento) {
+
+        if (!formulario.checkValidity()) {
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            return;
+        }
+
+        evento.preventDefault();
+
+        Swal.fire({
+            title: '¿Confirmar datos de la mascota?',
+            text: 'Se guardará la información en VetControl Perú.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#146c63',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then(function (respuesta) {
+
+            if (respuesta.isConfirmed) {
+
+                HTMLFormElement.prototype.submit.call(
+                    formulario
+                );
+            }
+
+        });
+
+    });
+
+});
+</script>
+
+</body>
+</html>

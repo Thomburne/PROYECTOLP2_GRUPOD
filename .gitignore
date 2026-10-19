@@ -1,0 +1,30 @@
+
+# VetControl Peru - GitHub
+
+# Maven
+target/
+
+# Spring Tools / Eclipse
+.settings/
+.classpath
+.project
+.factorypath
+
+# Archivos temporales
+*.log
+*.tmp
+*.bak
+
+# Proteger credenciales de MySQL
+src/main/resources/application.properties
+.env
+.env.*
+!.env.example
+
+# Archivos privados
+*.pem
+*.key
+*.p12
+
+# Windows
+Thumbs.db

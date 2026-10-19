@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>VetControl Perú | Iniciar sesión</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #edf8f9;
+            color: #0c315d;
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            min-height: 100vh;
+            max-width: 1800px;
+            margin: auto;
+        }
+
+        /* PANEL IZQUIERDO CON IMAGEN REAL */
+
+        .panel-imagen {
+            background: #e8f8f8;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .panel-imagen img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        /* PANEL DERECHO */
+
+        .panel-formulario {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 38px 45px;
+            background: #f7fbfc;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 600px;
+            padding: 45px 42px;
+            border-radius: 28px;
+            background: white;
+            box-shadow: 0 16px 48px
+                        rgba(20, 67, 95, 0.08);
+        }
+
+        .icono-superior {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            background: #eef6fc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        h1 {
+            font-size: 31px;
+            line-height: 1.3;
+            text-align: center;
+            margin: 0 0 10px;
+            color: #0b305d;
+        }
+
+        .subtitulo {
+            text-align: center;
+            font-size: 17px;
+            color: #718297;
+            margin-bottom: 35px;
+        }
+
+        .grupo {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .input-container input {
+            width: 100%;
+            height: 60px;
+            padding: 0 55px 0 20px;
+            font-size: 16px;
+            color: #16375e;
+            border: 1px solid #cbd8e6;
+            border-radius: 13px;
+            background: white;
+        }
+
+        .input-container input:focus {
+            outline: none;
+            border-color: #1a83d6;
+            box-shadow: 0 0 0 4px
+                        rgba(26, 131, 214, 0.12);
+        }
+
+        .mostrar-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #537394;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .btn-ingresar {
+            width: 100%;
+            height: 64px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 13px;
+            color: white;
+            background: linear-gradient(
+                90deg, #1976d2, #1683e4
+            );
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-ingresar:hover {
+            background: #0b61b6;
+        }
+
+        .mensaje {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .error {
+            color: #b91c1c;
+            background: #fff0f0;
+            border: 1px solid #ffcaca;
+        }
+
+        .exito {
+            color: #166534;
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+        }
+
+        .separador {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+            color: #a4b4c8;
+        }
+
+        .separador::before,
+        .separador::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #dbe5ed;
+        }
+
+        .info-seguridad {
+            padding: 22px;
+            background: #edf6ff;
+            border-radius: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .info-seguridad .escudo {
+            font-size: 34px;
+        }
+
+        .info-seguridad strong {
+            color: #154b82;
+            font-size: 17px;
+        }
+
+        .info-seguridad p {
+            margin: 7px 0 0;
+            color: #6c8095;
+            font-size: 14px;
+        }
+
+        .pie {
+            text-align: center;
+            color: #93a2b5;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 1000px) {
+
+            .login-container {
+                grid-template-columns: 45% 55%;
+            }
+
+            .panel-formulario {
+                padding: 20px;
+            }
+
+            .login-card {
+                padding: 30px 24px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+
+        /* CELULAR */
+
+        @media (max-width: 700px) {
+
+            .login-container {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .panel-imagen {
+                min-height: 0;
+                height: 300px;
+            }
+
+            .panel-imagen img {
+                object-fit: contain;
+            }
+
+            .panel-formulario {
+                padding: 20px 15px;
+            }
+
+            .login-card {
+                padding: 28px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="login-container">
+
+    <!-- IMAGEN VETCONTROL -->
+
+    <section class="panel-imagen">
+        <img th:src="@{/images/proyecto.png}"
+             src="/images/proyecto.png"
+             alt="VetControl Perú - Bulldog">
+    </section>
+
+    <!-- LOGIN FUNCIONAL -->
+
+    <section class="panel-formulario">
+
+        <div class="login-card">
+
+            <div class="icono-superior"
+                 aria-hidden="true">🐾</div>
+
+            <h1>Bienvenido a VetControl Perú</h1>
+
+            <p class="subtitulo">
+                Inicia sesión para acceder al sistema
+            </p>
+
+            <!-- ERROR DE AUTENTICACION -->
+
+            <div th:if="${param.error}"
+                 class="mensaje error"
+                 role="alert">
+                Usuario o contraseña incorrectos
+                o cuenta desactivada.
+            </div>
+
+            <!-- LOGOUT -->
+
+            <div th:if="${param.logout}"
+                 class="mensaje exito"
+                 role="status">
+                Has cerrado sesión correctamente.
+            </div>
+
+            <!-- FORMULARIO SPRING SECURITY -->
+
+            <form th:action="@{/login}"
+                  method="post">
+
+                <div class="grupo">
+                    <label for="username">Usuario</label>
+
+                    <div class="input-container">
+                        <input type="text"
+                               id="username"
+                               name="username"
+                               placeholder="Ingresa tu usuario"
+                               autocomplete="username"
+                               maxlength="50"
+                               required
+                               autofocus>
+                    </div>
+                </div>
+
+                <div class="grupo">
+                    <label for="password">Contraseña</label>
+
+                    <div class="input-container">
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Ingresa tu contraseña"
+                               autocomplete="current-password"
+                               required>
+
+                        <button type="button"
+                                id="mostrarPassword"
+                                class="mostrar-password"
+                                aria-label="Mostrar contraseña">
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="btn-ingresar">
+                    Iniciar sesión
+                </button>
+
+            </form>
+
+            <div class="separador"
+                 aria-hidden="true">🐾</div>
+
+            <div class="info-seguridad">
+                <div class="escudo"
+                     aria-hidden="true">🛡️</div>
+
+                <div>
+                    <strong>
+                        Sistema de gestión veterinaria
+                    </strong>
+
+                    <p>
+                        Acceso restringido para
+                        usuarios autorizados.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pie">
+                © 2026 VetControl Perú
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+    const passwordInput =
+        document.getElementById("password");
+
+    const mostrarPassword =
+        document.getElementById("mostrarPassword");
+
+    mostrarPassword.addEventListener(
+        "click",
+        function () {
+
+            const visible =
+                passwordInput.type === "password";
+
+            passwordInput.type =
+                visible ? "text" : "password";
+
+            mostrarPassword.textContent =
+                visible ? "Ocultar" : "Mostrar";
+
+            mostrarPassword.setAttribute(
+                "aria-label",
+                visible
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+            );
+        }
+    );
+</script>
+
+</body>
+</html>

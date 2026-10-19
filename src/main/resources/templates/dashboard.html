@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | VetControl Perú</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f0f6f9;
+            color: #173b59;
+        }
+
+        .aplicacion {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .menu {
+            width: 250px;
+            flex-shrink: 0;
+            padding: 25px 15px;
+            background: linear-gradient(
+                180deg, #103c63, #156d77
+            );
+            color: white;
+        }
+
+        .marca {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid #ffffff40;
+        }
+
+        .marca h2 {
+            margin: 5px 0;
+        }
+
+        .marca p {
+            letter-spacing: 4px;
+            color: #9de8e3;
+        }
+
+        .enlace {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
+        .enlace:hover,
+        .enlace.actual {
+            background: #ffffff27;
+        }
+
+        .deshabilitado {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .salir {
+            background: #b83742;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            text-align: left;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 30px;
+        }
+
+        .salir:hover {
+            background: #962932;
+        }
+
+        .principal {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cabecera {
+            background: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px #0000000a;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .perfil {
+            display: inline-block;
+            background: #e3f5f3;
+            color: #087a75;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .contenido {
+            max-width: 1400px;
+            margin: auto;
+            padding: 32px;
+        }
+
+        .bienvenida {
+            background: linear-gradient(
+                110deg, #169c9c, #12436d
+            );
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .bienvenida h2 {
+            margin: 0 0 10px;
+        }
+
+        .bienvenida p {
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .tarjetas {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .tarjeta {
+            background: white;
+            border: 1px solid #e2ebf1;
+            border-radius: 17px;
+            padding: 24px;
+            box-shadow: 0 5px 18px #123b7010;
+        }
+
+        .tarjeta .simbolo {
+            font-size: 35px;
+        }
+
+        .tarjeta h3 {
+            margin: 15px 0 8px;
+        }
+
+        .numero {
+            font-size: 36px;
+            font-weight: bold;
+            color: #087f8f;
+            margin: 10px 0;
+        }
+
+        .tarjeta p {
+            color: #687f90;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 42px;
+        }
+
+        .boton {
+            display: block;
+            background: #167bcc;
+            text-decoration: none;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 18px;
+            font-weight: 600;
+        }
+
+        .boton:hover {
+            background: #0b5d9c;
+            color: white;
+        }
+
+        .pendiente {
+            display: block;
+            background: #e6ecf1;
+            color: #627789;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .informacion {
+            margin-top: 28px;
+            padding: 25px;
+            background: white;
+            border-radius: 16px;
+        }
+
+        .informacion p {
+            color: #667a8e;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1100px) {
+            .tarjetas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .aplicacion {
+                flex-direction: column;
+            }
+
+            .menu {
+                width: 100%;
+            }
+
+            .cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .contenido {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tarjetas {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="menu">
+
+        <div class="marca">
+            <div style="font-size:45px">🐾</div>
+            <h2>VetControl</h2>
+            <p>PERÚ</p>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}"
+               class="enlace actual">
+                🏠 Inicio
+            </a>
+
+            <a th:href="@{/clientes}"
+               class="enlace">
+                👥 Clientes
+            </a>
+
+            <a th:href="@{/mascotas}"
+               class="enlace">
+                🐶 Mascotas
+            </a>
+
+            <a th:href="@{/citas}"
+               class="enlace">
+                📅 Citas
+            </a>
+
+            <!-- SERVICIOS ACTIVADO -->
+            <a th:href="@{/servicios}"
+               class="enlace">
+                🩺 Servicios
+            </a>
+
+            <!-- USUARIOS PENDIENTE -->
+            <span th:if="${esAdmin}"
+                  class="enlace deshabilitado">
+                🔐 Usuarios (próximamente)
+            </span>
+
+            <!-- CERRAR SESIÓN -->
+            <form th:action="@{/logout}"
+                  method="post">
+
+                <button type="submit" class="salir">
+                    Cerrar sesión
+                </button>
+
+            </form>
+
+        </nav>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>Panel de control</h1>
+
+            <div>
+                <strong th:text="${username}">
+                    Usuario
+                </strong>
+
+                <span class="perfil"
+                      th:text="${rol}">
+                    Rol
+                </span>
+            </div>
+
+        </header>
+
+        <main class="contenido">
+
+            <!-- BIENVENIDA -->
+            <section class="bienvenida">
+
+                <h2>Bienvenido a VetControl Perú</h2>
+
+                <p>
+                    Hola,
+                    <strong th:text="${username}">
+                        usuario
+                    </strong>.
+
+                    Consulta las estadísticas generales
+                    y administra los módulos veterinarios.
+                </p>
+
+            </section>
+
+            <h2>Resumen general</h2>
+
+            <section class="tarjetas">
+
+                <!-- CLIENTES -->
+                <article class="tarjeta">
+
+                    <div class="simbolo">👥</div>
+
+                    <h3>Clientes</h3>
+
+                    <div class="numero"
+                         th:text="${totalClientes}">
+                        0
+                    </div>
+
+                    <p>
+                        Total de clientes registrados.
+                    </p>
+
+                    <a class="boton"
+                       th:href="@{/clientes}">
+                        Ver clientes
+                    </a>
+
+                </article>
+
+                <!-- MASCOTAS -->
+                <article class="tarjeta">
+
+                    <div class="simbolo">🐾</div>
+
+                    <h3>Mascotas</h3>
+
+                    <div class="numero"
+                         th:text="${totalMascotas}">
+                        0
+                    </div>
+
+                    <p>
+                        Total de mascotas registradas.
+                    </p>
+
+                    <a class="boton"
+                       th:href="@{/mascotas}">
+                        Ver mascotas
+                    </a>
+
+                </article>
+
+                <!-- CITAS -->
+                <article class="tarjeta">
+
+                    <div class="simbolo">📅</div>
+
+                    <h3>Citas</h3>
+
+                    <div class="numero"
+                         th:text="${totalCitas}">
+                        0
+                    </div>
+
+                    <p>
+                        Total histórico de citas.
+                    </p>
+
+                    <a class="boton"
+                       th:href="@{/citas}">
+                        Ver citas
+                    </a>
+
+                </article>
+
+                <!-- SERVICIOS -->
+                <article class="tarjeta">
+
+                    <div class="simbolo">🩺</div>
+
+                    <h3>Servicios</h3>
+
+                    <div class="numero"
+                         th:text="${totalServicios}">
+                        0
+                    </div>
+
+                    <p>
+                        Servicios registrados
+                        en el catálogo MySQL.
+                    </p>
+
+                    <!-- BOTÓN FUNCIONAL -->
+                    <a class="boton"
+                       th:href="@{/servicios}">
+                        Ver servicios
+                    </a>
+
+                </article>
+
+            </section>
+
+            <!-- INFORMACIÓN DE SESIÓN -->
+            <section class="informacion">
+
+                <h3>Información de la sesión</h3>
+
+                <p>
+                    Usuario:
+                    <strong th:text="${username}">
+                        usuario
+                    </strong>
+                </p>
+
+                <p>
+                    Perfil:
+                    <strong th:text="${rol}">
+                        EMPLEADO
+                    </strong>
+                </p>
+
+                <p th:if="${esAdmin}">
+                    Sesión con permisos de administración.
+                </p>
+
+                <p th:unless="${esAdmin}">
+                    Sesión con permisos operativos.
+                </p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>
