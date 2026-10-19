@@ -1,0 +1,91 @@
+-- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
+--
+-- Host: localhost    Database: vetcontrol_peru
+-- ------------------------------------------------------
+-- Server version	8.0.46
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `tbl_comprobante`
+--
+
+DROP TABLE IF EXISTS `tbl_comprobante`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_comprobante` (
+  `id_comprobante` bigint NOT NULL AUTO_INCREMENT,
+  `id_cliente` bigint NOT NULL,
+  `id_usuario` bigint DEFAULT NULL,
+  `tipo` enum('BOLETA','FACTURA') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serie` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `numero` int NOT NULL,
+  `fecha_emision` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `moneda` char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PEN',
+  `subtotal` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `igv` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `total` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `estado` enum('BORRADOR','EMITIDO_INTERNO','ANULADO') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'BORRADOR',
+  `sunat_estado` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sunat_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id_comprobante`),
+  UNIQUE KEY `uq_comprobante_serie_numero` (`tipo`,`serie`,`numero`),
+  KEY `fk_comprobante_cliente` (`id_cliente`),
+  KEY `fk_comprobante_usuario` (`id_usuario`),
+  CONSTRAINT `fk_comprobante_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `tbl_cliente` (`id_cliente`),
+  CONSTRAINT `fk_comprobante_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `tbl_usuario` (`id_usuario`),
+  CONSTRAINT `ck_comprobante_importes` CHECK (((`subtotal` >= 0) and (`igv` >= 0) and (`total` >= 0)))
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_comprobante`
+--
+
+LOCK TABLES `tbl_comprobante` WRITE;
+/*!40000 ALTER TABLE `tbl_comprobante` DISABLE KEYS */;
+INSERT INTO `tbl_comprobante` VALUES
+(1,1,17,'BOLETA','B001',101,'2026-10-01 12:30:00','PEN',55.08,9.92,65.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00101x9a'),
+(2,2,18,'BOLETA','B001',102,'2026-10-01 12:30:00','PEN',38.14,6.86,45.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00102x9a'),
+(3,3,19,'BOLETA','B001',103,'2026-10-02 12:30:00','PEN',42.37,7.63,50.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00103x9a'),
+(4,4,16,'BOLETA','B001',104,'2026-10-02 12:30:00','PEN',55.08,9.92,65.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00104x9a'),
+(5,5,17,'BOLETA','B001',105,'2026-10-03 12:30:00','PEN',33.90,6.10,40.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00105x9a'),
+(6,6,18,'BOLETA','B001',106,'2026-10-03 12:30:00','PEN',46.61,8.39,55.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00106x9a'),
+(7,7,19,'BOLETA','B001',107,'2026-10-04 12:30:00','PEN',55.08,9.92,65.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00107x9a'),
+(8,8,16,'BOLETA','B001',108,'2026-10-04 12:30:00','PEN',33.90,6.10,40.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00108x9a'),
+(9,9,17,'BOLETA','B001',109,'2026-10-05 12:30:00','PEN',50.85,9.15,60.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00109x9a'),
+(10,10,18,'BOLETA','B001',110,'2026-10-05 12:30:00','PEN',63.56,11.44,75.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00110x9a'),
+(11,11,19,'BOLETA','B001',111,'2026-10-06 12:30:00','PEN',38.14,6.86,45.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00111x9a'),
+(12,12,16,'BOLETA','B001',112,'2026-10-06 12:30:00','PEN',46.61,8.39,55.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00112x9a'),
+(13,13,17,'BOLETA','B001',113,'2026-10-07 12:30:00','PEN',38.14,6.86,45.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00113x9a'),
+(14,14,18,'BOLETA','B001',114,'2026-10-07 12:30:00','PEN',29.66,5.34,35.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00114x9a'),
+(15,15,19,'BOLETA','B001',115,'2026-10-08 12:30:00','PEN',33.90,6.10,40.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00115x9a'),
+(16,16,16,'BOLETA','B001',116,'2026-10-08 12:30:00','PEN',42.37,7.63,50.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00116x9a'),
+(17,17,17,'BOLETA','B001',117,'2026-10-09 12:30:00','PEN',29.66,5.34,35.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00117x9a'),
+(18,18,18,'BOLETA','B001',118,'2026-10-09 12:30:00','PEN',29.66,5.34,35.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00118x9a'),
+(19,19,19,'BOLETA','B001',119,'2026-10-10 12:30:00','PEN',50.85,9.15,60.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00119x9a'),
+(20,20,16,'BOLETA','B001',120,'2026-10-10 12:30:00','PEN',42.37,7.63,50.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00120x9a'),
+(21,21,17,'FACTURA','F001',1,'2026-10-01 12:30:00','PEN',152.54,27.46,180.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-f001-00001x9a'),
+(22,1,18,'BOLETA','B001',121,'2026-10-11 12:30:00','PEN',46.61,8.39,55.00,'EMITIDO_INTERNO','ACEPTADO','cpe-hash-b001-00121x9a');
+/*!40000 ALTER TABLE `tbl_comprobante` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-10-16 07:45:12
