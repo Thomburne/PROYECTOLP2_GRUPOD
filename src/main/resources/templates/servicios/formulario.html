@@ -244,7 +244,16 @@
                 <i class="fa-solid fa-stethoscope"></i>
                 Servicios
             </a>
+			<!-- enlace -->
+			<a th:href="@{/productos}" class="enlace-menu">
+			    <i class="fa-solid fa-boxes-stacked"></i>
+			    Productos
+			</a>
 
+			<a th:href="@{/inventario}" class="enlace-menu">
+			    <i class="fa-solid fa-right-left"></i>
+			    Movimientos
+			</a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="salir">
                     <i class="fa-solid fa-right-from-bracket"></i>

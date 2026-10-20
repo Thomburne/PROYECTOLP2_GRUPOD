@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Productos | VetControl Perú</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css">
+
+    <style>
+        :root {
+            --azul: #143e60;
+            --turquesa: #168e98;
+            --fondo: #edf5f8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #173b59;
+        }
+
+        .aplicacion { display: flex; min-height: 100vh; }
+
+        .menu {
+            width: 255px;
+            flex-shrink: 0;
+            padding: 24px 14px;
+            color: white;
+            background: linear-gradient(180deg, #143e60, #176a78);
+        }
+
+        .marca {
+            text-align: center;
+            padding: 15px 0 28px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #ffffff35;
+        }
+
+        .marca i { font-size: 40px; color: #7ce1d9; }
+
+        .marca h2 { font-size: 25px; font-weight: 700; margin: 12px 0 3px; }
+
+        .marca h2 span { color: #7ce1d9; }
+
+        .marca small { color: #b8ebe8; letter-spacing: 5px; }
+
+        .enlace-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 11px;
+            margin-bottom: 8px;
+        }
+
+        .enlace-menu:hover,
+        .enlace-menu.activo { background: #ffffff28; color: white; }
+
+        .salir {
+            background: #bb3943;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            width: 100%;
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .principal { flex: 1; min-width: 0; }
+
+        .cabecera {
+            background: white;
+            padding: 22px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 2px 10px #0000000a;
+        }
+
+        .cabecera h1 { font-size: 25px; font-weight: 700; margin: 0; }
+
+        .contenido { max-width: 1600px; margin: auto; padding: 30px; }
+
+        .tarjeta {
+            background: white;
+            border: 1px solid #e0eaf0;
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 6px 22px #123e6310;
+        }
+
+        .titulo { color: var(--azul); font-weight: 700; }
+
+        .filtros {
+            background: #f5f9fb;
+            border: 1px solid #dce9ee;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .filtros h5 { font-weight: 700; font-size: 16px; }
+
+        .contador {
+            display: inline-block;
+            background: #d8f7e8;
+            color: #14744c;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 9px 15px;
+        }
+
+        .table thead th {
+            background: #16486b;
+            color: white;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .table tbody td { vertical-align: middle; }
+
+        .precio { color: #146c63; font-weight: 700; white-space: nowrap; }
+
+        .estado-activo,
+        .estado-inactivo,
+        .stock-bajo {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 24px;
+            font-weight: 600;
+        }
+
+        .estado-activo { background: #d8f7e8; color: #157347; }
+        .estado-inactivo { background: #fce0e0; color: #ad3838; }
+        .stock-bajo { background: #fff0d6; color: #a65b00; padding: 3px 9px; font-size: 12px; }
+
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 7px;
+            min-width: 170px;
+        }
+
+        .acciones form { margin: 0; }
+
+        @media (max-width: 900px) {
+            .aplicacion { flex-direction: column; }
+            .menu { width: 100%; }
+            .cabecera { flex-wrap: wrap; padding: 18px; }
+            .contenido { padding: 15px; }
+            .tarjeta { padding: 16px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENU LATERAL -->
+    <aside class="menu">
+
+        <div class="marca">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <h2>Vet<span>Control</span></h2>
+            <small>PERÚ</small>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}" class="enlace-menu">
+                <i class="fa-solid fa-house"></i>
+                Inicio
+            </a>
+
+            <a th:href="@{/clientes}" class="enlace-menu">
+                <i class="fa-solid fa-users"></i>
+                Clientes
+            </a>
+
+            <a th:href="@{/mascotas}" class="enlace-menu">
+                <i class="fa-solid fa-paw"></i>
+                Mascotas
+            </a>
+
+            <a th:href="@{/citas}" class="enlace-menu">
+                <i class="fa-solid fa-calendar-check"></i>
+                Citas
+            </a>
+
+            <a th:href="@{/servicios}" class="enlace-menu">
+                <i class="fa-solid fa-stethoscope"></i>
+                Servicios
+            </a>
+
+            <a th:href="@{/productos}"
+               class="enlace-menu activo"
+               aria-current="page">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                Productos
+            </a>
+			
+			<a th:href="@{/inventario}" class="enlace-menu">
+			    <i class="fa-solid fa-right-left"></i>
+			    Movimientos
+			</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="salir">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Cerrar sesión
+                </button>
+            </form>
+
+        </nav>
+    </aside>
+
+    <!-- AREA PRINCIPAL -->
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>
+                <i class="fa-solid fa-boxes-stacked text-info"></i>
+                Gestión de Inventario
+            </h1>
+
+            <a th:href="@{/dashboard}"
+               class="btn btn-outline-primary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver al Dashboard
+            </a>
+
+        </header>
+
+        <main class="contenido">
+
+            <section class="tarjeta">
+
+                <div class="d-flex flex-wrap
+                            justify-content-between
+                            align-items-center gap-3 mb-4">
+
+                    <div>
+                        <h2 class="titulo">Productos</h2>
+                        <p class="text-secondary mb-0">
+                            Administra vacunas, medicamentos, higiene
+                            y accesorios con su stock.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/productos/nuevo}"
+                       class="btn btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                        Nuevo Producto
+                    </a>
+
+                </div>
+
+                <!-- MENSAJES -->
+                <div id="mensajeExito"
+                     th:if="${mensajeExito}"
+                     th:text="${mensajeExito}"
+                     class="d-none"></div>
+
+                <div id="mensajeError"
+                     th:if="${mensajeError}"
+                     th:text="${mensajeError}"
+                     class="d-none"></div>
+
+                <!-- CONTADOR -->
+                <div class="mb-4">
+                    <span class="contador"
+                          th:text="${#lists.size(productos)} + ' productos encontrados'">
+                        0 productos encontrados
+                    </span>
+                </div>
+
+                <!-- FILTROS (se envian al servidor) -->
+                <form class="filtros mb-4"
+                      th:action="@{/productos}"
+                      method="get">
+
+                    <h5 class="mb-3">
+                        <i class="fa-solid fa-filter"></i>
+                        Filtros de búsqueda
+                    </h5>
+
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="nombre">
+                                Nombre del producto
+                            </label>
+                            <input id="nombre"
+                                   name="nombre"
+                                   type="search"
+                                   class="form-control"
+                                   placeholder="Ej: shampoo, vacuna"
+                                   th:value="${filtroNombre}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label" for="categoria">
+                                Categoría
+                            </label>
+                            <select id="categoria"
+                                    name="categoria"
+                                    class="form-select">
+                                <option value="">Todas</option>
+                                <option th:each="cat : ${categorias}"
+                                        th:value="${cat}"
+                                        th:text="${cat}"
+                                        th:selected="${cat == filtroCategoria}">
+                                    Categoría
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="soloStockBajo"
+                                       name="soloStockBajo"
+                                       value="true"
+                                       th:checked="${filtroStockBajo}">
+                                <label class="form-check-label"
+                                       for="soloStockBajo">
+                                    Solo stock bajo
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Buscar
+                            </button>
+
+                            <a th:href="@{/productos}"
+                               class="btn btn-outline-secondary w-100">
+                                <i class="fa-solid fa-broom"></i>
+                                Limpiar
+                            </a>
+                        </div>
+
+                    </div>
+                </form>
+
+                <!-- TABLA -->
+                <div class="table-responsive">
+
+                    <table id="tablaProductos"
+                           class="table table-bordered table-striped
+                                  table-hover align-middle w-100">
+
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Unidad</th>
+                                <th>Stock</th>
+                                <th>Mínimo</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="producto : ${productos}"
+                                th:with="bajo=${producto.stockActual.compareTo(producto.stockMinimo) le 0}">
+
+                                <td th:text="${producto.codigo}"></td>
+
+                                <td th:text="${producto.nombre}"></td>
+
+                                <td th:text="${producto.categoria}"></td>
+
+                                <td th:text="${producto.unidadMedida}"></td>
+
+                                <td class="text-end">
+                                    <span th:text="${#numbers.formatDecimal(producto.stockActual, 1, 2)}">0.00</span>
+                                    <span th:if="${bajo}" class="stock-bajo">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        Bajo
+                                    </span>
+                                </td>
+
+                                <td class="text-end"
+                                    th:text="${#numbers.formatDecimal(producto.stockMinimo, 1, 2)}">
+                                    0.00
+                                </td>
+
+                                <td class="precio text-end"
+                                    th:text="${'S/ ' + #numbers.formatDecimal(producto.precioVenta, 1, 2)}">
+                                    S/ 0.00
+                                </td>
+
+                                <td class="text-center">
+                                    <span th:if="${producto.activo == true}"
+                                          class="estado-activo">Activo</span>
+                                    <span th:unless="${producto.activo == true}"
+                                          class="estado-inactivo">Inactivo</span>
+                                </td>
+
+                                <td>
+                                    <div class="acciones">
+
+                                        <a th:href="@{/productos/{id}/editar(id=${producto.idProducto})}"
+                                           class="btn btn-warning btn-sm"
+                                           title="Editar producto">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            Editar
+                                        </a>
+
+                                        <form class="formEstado"
+                                              th:action="@{/productos/{id}/cambiar-estado(id=${producto.idProducto})}"
+                                              method="post">
+
+                                            <input type="hidden"
+                                                   class="estadoActual"
+                                                   th:value="${producto.activo == true ? 'Activo' : 'Inactivo'}">
+
+                                            <button type="submit"
+                                                    class="btn btn-sm"
+                                                    th:classappend="${producto.activo == true ? 'btn-danger' : 'btn-success'}">
+                                                <span th:if="${producto.activo == true}">Desactivar</span>
+                                                <span th:unless="${producto.activo == true}">Activar</span>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- LIBRERIAS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const mensajeExito = document.getElementById("mensajeExito");
+    const mensajeError = document.getElementById("mensajeError");
+
+    if (typeof Swal !== "undefined") {
+
+        if (mensajeExito) {
+            Swal.fire({
+                icon: "success",
+                title: "Operación exitosa",
+                text: mensajeExito.textContent.trim(),
+                confirmButtonColor: "#168e98"
+            });
+        }
+
+        if (mensajeError) {
+            Swal.fire({
+                icon: "error",
+                title: "No se pudo completar",
+                text: mensajeError.textContent.trim()
+            });
+        }
+    }
+
+    // CONFIRMACION DE CAMBIO DE ESTADO
+    document.querySelectorAll(".formEstado")
+        .forEach(function (formulario) {
+
+            formulario.addEventListener("submit", function (evento) {
+
+                if (typeof Swal === "undefined") {
+                    return;
+                }
+
+                evento.preventDefault();
+
+                const estado =
+                    formulario.querySelector(".estadoActual").value;
+
+                const accion =
+                    estado === "Activo" ? "desactivar" : "activar";
+
+                Swal.fire({
+                    title: "¿Desea " + accion + " este producto?",
+                    text: "El registro no será eliminado.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#168e98",
+                    confirmButtonText: "Sí, confirmar",
+                    cancelButtonText: "Cancelar"
+                }).then(function (resultado) {
+
+                    if (resultado.isConfirmed) {
+                        HTMLFormElement.prototype.submit.call(formulario);
+                    }
+                });
+            });
+        });
+
+    // DATATABLES (solo paginacion y orden; los filtros los hace el servidor)
+    if (typeof DataTable === "undefined") {
+        console.error("DataTables no está disponible.");
+        return;
+    }
+
+    new DataTable("#tablaProductos", {
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        order: [Array.of(1, "asc")],
+
+        layout: {
+            topStart: "pageLength",
+            topEnd: null,
+            bottomStart: "info",
+            bottomEnd: "paging"
+        },
+
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ productos",
+            infoEmpty: "Sin productos",
+            infoFiltered: "(filtrados de _MAX_ productos)",
+            zeroRecords: "No se encontraron productos",
+            emptyTable: "No hay productos registrados",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        },
+
+        columnDefs: [{
+            targets: 8,
+            orderable: false,
+            searchable: false
+        }]
+    });
+});
+</script>
+</body>
+</html>

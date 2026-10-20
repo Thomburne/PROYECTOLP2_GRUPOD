@@ -289,7 +289,16 @@
                class="enlace">
                 🩺 Servicios
             </a>
+			<!-- PRODUCTOS E INVENTARIO -->
+			<a th:href="@{/productos}"
+			   class="enlace">
+			    📦 Productos
+			</a>
 
+			<a th:href="@{/inventario}"
+			   class="enlace">
+			    🔄 Movimientos
+			</a>
             <!-- USUARIOS PENDIENTE -->
             <span th:if="${esAdmin}"
                   class="enlace deshabilitado">
