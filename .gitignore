@@ -28,3 +28,4 @@ src/main/resources/application.properties
 
 # Windows
 Thumbs.db
+/src/main/java/com/vetcontrol/recuperacion/
