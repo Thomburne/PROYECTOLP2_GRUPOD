@@ -28,9 +28,9 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
-    // =========================================
-    // 1. LISTAR CLIENTES
-    // =========================================
+    // ==========================================
+    // LISTADO DE CLIENTES
+    // ==========================================
     @GetMapping({"", "/"})
     public String listarClientes(Model model) {
 
@@ -42,9 +42,9 @@ public class ClienteController {
         return "clientes/listado";
     }
 
-    // =========================================
-    // 2. FORMULARIO NUEVO CLIENTE
-    // =========================================
+    // ==========================================
+    // FORMULARIO NUEVO CLIENTE
+    // ==========================================
     @GetMapping("/nuevo")
     public String nuevoCliente(Model model) {
 
@@ -58,12 +58,13 @@ public class ClienteController {
         return "clientes/formulario";
     }
 
-    // =========================================
-    // 3. GUARDAR NUEVO CLIENTE
-    // =========================================
+    // ==========================================
+    // REGISTRAR CLIENTE
+    // ==========================================
     @PostMapping("/guardar")
     public String guardarCliente(
-            @Valid @ModelAttribute("clienteDTO") ClienteDTO dto,
+            @Valid @ModelAttribute("clienteDTO")
+            ClienteDTO dto,
             BindingResult resultado,
             Model model,
             RedirectAttributes redirect) {
@@ -108,16 +109,17 @@ public class ClienteController {
             model.addAttribute(
                 "mensajeError",
                 "No se pudo registrar el cliente. "
-                + "Compruebe que el documento no este duplicado."
+                + "Compruebe que el documento no "
+                + "esté duplicado."
             );
 
             return mostrarFormulario(dto, false, model);
         }
     }
 
-    // =========================================
-    // 4. FORMULARIO EDITAR CLIENTE
-    // =========================================
+    // ==========================================
+    // FORMULARIO EDITAR CLIENTE
+    // ==========================================
     @GetMapping("/{id}/editar")
     public String editarCliente(
             @PathVariable Long id,
@@ -137,7 +139,8 @@ public class ClienteController {
             return "redirect:/clientes";
         }
 
-        ClienteDTO dto = convertirDTO(encontrado.get());
+        ClienteDTO dto =
+            convertirDTO(encontrado.get());
 
         model.addAttribute("clienteDTO", dto);
         model.addAttribute("modoEdicion", true);
@@ -145,13 +148,14 @@ public class ClienteController {
         return "clientes/formulario";
     }
 
-    // =========================================
-    // 5. ACTUALIZAR CLIENTE
-    // =========================================
+    // ==========================================
+    // ACTUALIZAR CLIENTE
+    // ==========================================
     @PostMapping("/{id}/actualizar")
     public String actualizarCliente(
             @PathVariable Long id,
-            @Valid @ModelAttribute("clienteDTO") ClienteDTO dto,
+            @Valid @ModelAttribute("clienteDTO")
+            ClienteDTO dto,
             BindingResult resultado,
             Model model,
             RedirectAttributes redirect) {
@@ -190,12 +194,8 @@ public class ClienteController {
         Cliente cliente = encontrado.get();
 
         // CORRECCION IMPORTANTE:
-        // APLICAR LOS CAMBIOS DEL FORMULARIO
-        // SOBRE EL REGISTRO EXISTENTE.
+        // COPIAR LOS NUEVOS DATOS ANTES DE GUARDAR
         copiarDatos(dto, cliente);
-
-        // SE CONSERVAN EL ID, EL ESTADO
-        // Y LA FECHA ORIGINAL DE REGISTRO.
 
         try {
 
@@ -213,16 +213,16 @@ public class ClienteController {
             model.addAttribute(
                 "mensajeError",
                 "No se pudo actualizar el cliente. "
-                + "Verifique la informacion ingresada."
+                + "Verifique la información."
             );
 
             return mostrarFormulario(dto, true, model);
         }
     }
 
-    // =========================================
-    // 6. ACTIVAR Y DESACTIVAR CLIENTE
-    // =========================================
+    // ==========================================
+    // ACTIVAR / DESACTIVAR CLIENTE
+    // ==========================================
     @PostMapping("/{id}/cambiar-estado")
     public String cambiarEstado(
             @PathVariable Long id,
@@ -235,7 +235,7 @@ public class ClienteController {
 
             redirect.addFlashAttribute(
                 "mensajeError",
-                "No se encontro el cliente."
+                "No se encontró el cliente."
             );
 
             return "redirect:/clientes";
@@ -244,7 +244,9 @@ public class ClienteController {
         Cliente cliente = encontrado.get();
 
         boolean estabaActivo =
-            Boolean.TRUE.equals(cliente.getActivo());
+            Boolean.TRUE.equals(
+                cliente.getActivo()
+            );
 
         cliente.setActivo(!estabaActivo);
 
@@ -270,52 +272,88 @@ public class ClienteController {
         return "redirect:/clientes";
     }
 
-    // =========================================
-    // 7. CONVERTIR ENTIDAD A DTO
-    // =========================================
-    private ClienteDTO convertirDTO(Cliente cliente) {
+    // ==========================================
+    // CONVERTIR ENTIDAD A DTO
+    // ==========================================
+    private ClienteDTO convertirDTO(
+            Cliente cliente) {
 
         ClienteDTO dto = new ClienteDTO();
 
-        dto.setIdCliente(cliente.getIdCliente());
-        dto.setTipoDocumento(cliente.getTipoDocumento());
-        dto.setNroDocumento(cliente.getNroDocumento());
+        dto.setIdCliente(
+            cliente.getIdCliente()
+        );
+
+        dto.setTipoDocumento(
+            cliente.getTipoDocumento()
+        );
+
+        dto.setNroDocumento(
+            cliente.getNroDocumento()
+        );
 
         dto.setNombresRazonSocial(
             cliente.getNombresRazonSocial()
         );
 
-        dto.setApellidos(cliente.getApellidos());
-        dto.setCelular(cliente.getCelular());
-        dto.setCorreo(cliente.getCorreo());
-        dto.setDireccion(cliente.getDireccion());
+        dto.setApellidos(
+            cliente.getApellidos()
+        );
+
+        dto.setCelular(
+            cliente.getCelular()
+        );
+
+        dto.setCorreo(
+            cliente.getCorreo()
+        );
+
+        dto.setDireccion(
+            cliente.getDireccion()
+        );
 
         return dto;
     }
 
-    // =========================================
-    // 8. COPIAR DATOS DEL DTO A LA ENTIDAD
-    // =========================================
+    // ==========================================
+    // COPIAR DATOS DEL FORMULARIO
+    // ==========================================
     private void copiarDatos(
             ClienteDTO dto,
             Cliente cliente) {
 
-        cliente.setTipoDocumento(dto.getTipoDocumento());
-        cliente.setNroDocumento(dto.getNroDocumento());
+        cliente.setTipoDocumento(
+            dto.getTipoDocumento()
+        );
+
+        cliente.setNroDocumento(
+            dto.getNroDocumento()
+        );
 
         cliente.setNombresRazonSocial(
             dto.getNombresRazonSocial()
         );
 
-        cliente.setApellidos(dto.getApellidos());
-        cliente.setCelular(dto.getCelular());
-        cliente.setCorreo(dto.getCorreo());
-        cliente.setDireccion(dto.getDireccion());
+        cliente.setApellidos(
+            dto.getApellidos()
+        );
+
+        cliente.setCelular(
+            dto.getCelular()
+        );
+
+        cliente.setCorreo(
+            dto.getCorreo()
+        );
+
+        cliente.setDireccion(
+            dto.getDireccion()
+        );
     }
 
-    // =========================================
-    // 9. VALIDAR DOCUMENTO DUPLICADO
-    // =========================================
+    // ==========================================
+    // VALIDAR DOCUMENTO DUPLICADO
+    // ==========================================
     private boolean documentoDuplicado(
             ClienteDTO dto,
             Long idActual) {
@@ -336,13 +374,14 @@ public class ClienteController {
             );
     }
 
-    // =========================================
-    // 10. NORMALIZAR DATOS
-    // =========================================
+    // ==========================================
+    // NORMALIZAR DATOS
+    // ==========================================
     private void normalizar(ClienteDTO dto) {
 
         dto.setTipoDocumento(
-            limpiar(dto.getTipoDocumento()).toUpperCase()
+            limpiar(dto.getTipoDocumento())
+                .toUpperCase()
         );
 
         dto.setNroDocumento(
@@ -370,24 +409,33 @@ public class ClienteController {
         );
     }
 
-    // =========================================
-    // 11. LIMPIAR ESPACIOS
-    // =========================================
+    // ==========================================
+    // LIMPIAR ESPACIOS
+    // ==========================================
     private String limpiar(String dato) {
 
-        return dato == null ? "" : dato.trim();
+        return dato == null
+            ? ""
+            : dato.trim();
     }
 
-    // =========================================
-    // 12. MOSTRAR FORMULARIO CON DATOS
-    // =========================================
+    // ==========================================
+    // MOSTRAR FORMULARIO
+    // ==========================================
     private String mostrarFormulario(
             ClienteDTO dto,
             boolean modoEdicion,
             Model model) {
 
-        model.addAttribute("clienteDTO", dto);
-        model.addAttribute("modoEdicion", modoEdicion);
+        model.addAttribute(
+            "clienteDTO",
+            dto
+        );
+
+        model.addAttribute(
+            "modoEdicion",
+            modoEdicion
+        );
 
         return "clientes/formulario";
     }

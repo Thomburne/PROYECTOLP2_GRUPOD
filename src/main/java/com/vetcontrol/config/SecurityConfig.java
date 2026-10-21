@@ -63,17 +63,16 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 // RECURSOS PUBLICOS
-            		.requestMatchers(
-            			    "/",
-            			    "/login",
-            			    "/error",
-            			    "/css/**",
-            			    "/js/**",
-            			    "/images/**",
-            			    "/img/**",
-            			    "/webjars/**",
-            			    "/favicon.ico"
-            			).permitAll()
+                .requestMatchers(
+                    "/login",
+                    "/error",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+                    "/img/**",
+                    "/webjars/**",
+                    "/favicon.ico"
+                ).permitAll()
 
                 // SOLO ADMINISTRADOR
                 .requestMatchers(

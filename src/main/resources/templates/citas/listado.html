@@ -1,33 +1,24 @@
 
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1">
 
-    <title>Citas Veterinarias | VetControl Perú</title>
+    <title>Listado de Citas | VetControl Perú</title>
 
-    <!-- BOOTSTRAP -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-    <!-- FONT AWESOME -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- DATATABLES -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
-
     <style>
         :root {
-            --azul: #123e63;
-            --turquesa: #168f99;
+            --azul: #16486b;
             --fondo: #eef5f8;
-            --texto: #173b59;
         }
 
         * {
@@ -36,17 +27,15 @@
 
         body {
             margin: 0;
-            background: var(--fondo);
-            color: var(--texto);
             font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--fondo);
+            color: #173b59;
         }
 
         .aplicacion {
             display: flex;
             min-height: 100vh;
         }
-
-        /* MENU LATERAL */
 
         .menu-lateral {
             width: 255px;
@@ -60,41 +49,40 @@
 
         .logo {
             text-align: center;
-            padding: 15px 0 30px;
+            padding: 16px 0 28px;
             border-bottom: 1px solid #ffffff35;
             margin-bottom: 24px;
         }
 
         .logo i {
-            font-size: 40px;
+            font-size: 38px;
             color: #77dfd7;
         }
 
         .logo h2 {
-            font-size: 24px;
+            font-size: 25px;
             font-weight: bold;
             margin: 12px 0 4px;
         }
 
         .logo h2 span {
-            color: #76dfd8;
+            color: #77dfd7;
         }
 
         .logo p {
             letter-spacing: 5px;
             color: #b4ece7;
-            margin: 0;
         }
 
         .nav-link-vet {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 15px;
+            padding: 13px 15px;
             margin-bottom: 7px;
-            color: white;
+            border-radius: 10px;
             text-decoration: none;
-            border-radius: 11px;
+            color: white;
         }
 
         .nav-link-vet:hover,
@@ -103,27 +91,16 @@
             color: white;
         }
 
-        .nav-link-vet.pendiente {
-            opacity: .6;
-            cursor: default;
-        }
-
         .btn-salir {
             width: 100%;
-            border: none;
             background: #bb3943;
+            border: 0;
             color: white;
-            text-align: left;
-            padding: 14px 15px;
+            padding: 13px;
             border-radius: 10px;
-            margin-top: 27px;
+            text-align: left;
+            margin-top: 24px;
         }
-
-        .btn-salir:hover {
-            background: #982e37;
-        }
-
-        /* CONTENIDO PRINCIPAL */
 
         .principal {
             flex: 1;
@@ -131,81 +108,93 @@
         }
 
         .cabecera {
+            background: white;
+            padding: 22px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            background: white;
-            padding: 22px 30px;
-            box-shadow: 0 2px 12px #0000000a;
         }
 
         .cabecera h1 {
             margin: 0;
-            font-size: 25px;
             font-weight: 700;
+            font-size: 25px;
         }
 
         .contenido {
             max-width: 1550px;
-            padding: 30px;
+            padding: 28px;
             margin: auto;
         }
 
         .tarjeta {
+            padding: 25px;
             background: white;
-            border-radius: 18px;
             border: 1px solid #e0eaf0;
-            padding: 26px;
-            box-shadow: 0 6px 22px #123e6310;
+            border-radius: 18px;
         }
 
         .titulo-modulo {
-            font-size: 29px;
+            font-size: 30px;
             font-weight: 700;
             color: #143f62;
         }
 
         .subtitulo {
             color: #71869a;
-            font-size: 14px;
+        }
+
+        .total-citas {
+            display: inline-block;
+            background: #d8f7e8;
+            color: #13734c;
+            padding: 10px 17px;
+            border-radius: 25px;
+            font-weight: 600;
         }
 
         .filtros {
             background: #f5f9fb;
-            border: 1px solid #e0eaf0;
-            border-radius: 13px;
-            padding: 20px;
+            border: 1px solid #dde8ee;
+            padding: 22px;
+            border-radius: 14px;
         }
 
         .filtros h5 {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .tabla-contenedor {
+            width: 100%;
             overflow-x: auto;
         }
 
-        .table thead th {
-            background: #16486b;
-            color: white;
+        /* CORRECCION DE TITULOS INVISIBLES */
+        #tablaCitas thead,
+        #tablaCitas thead tr,
+        #tablaCitas thead th {
+            --bs-table-bg: #16486b;
+            --bs-table-color: #ffffff;
+            --bs-table-accent-bg: #16486b;
+
+            background-color: #16486b !important;
+            color: #ffffff !important;
+        }
+
+        #tablaCitas thead th {
+            font-weight: 700;
+            padding: 14px 10px;
+            text-align: center;
+            vertical-align: middle;
             white-space: nowrap;
-            vertical-align: middle;
+            border-color: #ffffff50 !important;
         }
 
-        .table tbody td {
+        #tablaCitas tbody td {
             vertical-align: middle;
-        }
-
-        .acciones {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 7px;
-            min-width: 95px;
         }
 
         .precio {
@@ -214,24 +203,34 @@
             white-space: nowrap;
         }
 
-        .total-citas {
-            display: inline-block;
-            background: #d8f7e8;
-            color: #13734c;
-            padding: 9px 15px;
-            border-radius: 20px;
-            font-weight: 600;
+        .acciones {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-vet {
-            background: #177acb;
-            color: white;
-            border: none;
+        .paginacion {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
         }
 
-        .btn-vet:hover {
-            background: #0e5b98;
+        .paginacion button {
+            background: white;
+            color: #16486b;
+            border: 1px solid #c6d5e0;
+            border-radius: 7px;
+            padding: 6px 12px;
+        }
+
+        .paginacion button.actual {
+            background: #16486b;
             color: white;
+        }
+
+        .paginacion button:disabled {
+            opacity: .5;
         }
 
         @media (max-width: 900px) {
@@ -244,26 +243,15 @@
             }
 
             .contenido {
-                padding: 18px;
+                padding: 15px;
             }
 
             .cabecera {
-                padding: 18px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .cabecera {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-wrap: wrap;
             }
 
             .tarjeta {
-                padding: 16px;
-            }
-
-            .titulo-modulo {
-                font-size: 24px;
+                padding: 15px;
             }
         }
     </style>
@@ -274,7 +262,6 @@
 <div class="aplicacion">
 
     <!-- MENU LATERAL -->
-
     <aside class="menu-lateral">
 
         <div class="logo">
@@ -304,38 +291,31 @@
             </a>
 
             <a th:href="@{/citas}"
-               class="nav-link-vet activo"
-               aria-current="page">
+               class="nav-link-vet activo">
                 <i class="fa-solid fa-calendar-check"></i>
                 Citas
             </a>
 
-            <span class="nav-link-vet pendiente">
+            <a th:href="@{/servicios}"
+               class="nav-link-vet">
                 <i class="fa-solid fa-stethoscope"></i>
-                Servicios (en desarrollo)
-            </span>
+                Servicios
+            </a>
 
-            <form th:action="@{/logout}"
-                  method="post">
-
-                <button type="submit"
-                        class="btn-salir">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn-salir" type="submit">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     Cerrar sesión
                 </button>
-
             </form>
 
         </nav>
-
     </aside>
 
     <!-- PANEL PRINCIPAL -->
-
     <div class="principal">
 
         <header class="cabecera">
-
             <h1>
                 <i class="fa-solid fa-calendar-days text-info"></i>
                 Gestión de Citas
@@ -343,18 +323,15 @@
 
             <a th:href="@{/dashboard}"
                class="btn btn-outline-primary">
-                <i class="fa-solid fa-arrow-left"></i>
                 Volver al Dashboard
             </a>
-
         </header>
 
         <main class="contenido">
 
             <section class="tarjeta">
 
-                <!-- TITULO Y NAVEGACION -->
-
+                <!-- TITULO -->
                 <div class="row align-items-center mb-4 g-3">
 
                     <div class="col-lg-6">
@@ -365,29 +342,27 @@
 
                         <p th:if="${mascotaSeleccionada == null}"
                            class="subtitulo mb-0">
-                            Consulta, seguimiento y
-                            programación de citas veterinarias.
+                            Consulta, seguimiento y programación
+                            de citas veterinarias.
                         </p>
 
                         <p th:if="${mascotaSeleccionada != null}"
                            class="subtitulo mb-0">
 
                             Historial de:
-
                             <strong th:text="${mascotaSeleccionada.nombre}">
                                 Mascota
                             </strong>
 
                             | Propietario:
-
                             <span th:text="${mascotaSeleccionada.cliente.nombresRazonSocial}">
                                 Propietario
                             </span>
-
                         </p>
 
                     </div>
 
+                    <!-- BOTONES -->
                     <div class="col-lg-6 text-lg-end">
 
                         <a th:href="@{/clientes}"
@@ -411,6 +386,7 @@
                         <a th:if="${mascotaSeleccionada == null}"
                            th:href="@{/citas/nuevo}"
                            class="btn btn-success mb-2">
+
                             <i class="fa-solid fa-plus"></i>
                             Nueva cita
                         </a>
@@ -418,41 +394,39 @@
                         <a th:if="${mascotaSeleccionada != null}"
                            th:href="@{/citas/nuevo(mascotaId=${mascotaSeleccionada.idMascota})}"
                            class="btn btn-success mb-2">
+
                             <i class="fa-solid fa-plus"></i>
                             Nueva cita
                         </a>
 
                     </div>
-
                 </div>
 
                 <!-- MENSAJES -->
-
-                <div id="mensajeExito"
-                     th:if="${mensajeExito}"
-                     th:text="${mensajeExito}"
-                     class="d-none">
+                <div th:if="${mensajeExito}"
+                     id="mensajeExito"
+                     class="alert alert-success"
+                     th:text="${mensajeExito}">
                 </div>
 
-                <div id="mensajeError"
-                     th:if="${mensajeError}"
-                     th:text="${mensajeError}"
-                     class="d-none">
+                <div th:if="${mensajeError}"
+                     id="mensajeError"
+                     class="alert alert-danger"
+                     th:text="${mensajeError}">
                 </div>
 
-                <!-- TOTAL DE CITAS -->
-
+                <!-- CONTADOR -->
                 <div class="mb-4">
 
-                    <span class="total-citas"
+                    <span id="contadorCitas"
+                          class="total-citas"
                           th:text="${#lists.size(citas)} + ' citas registradas'">
                         0 citas registradas
                     </span>
 
                 </div>
 
-                <!-- FILTROS -->
-
+                <!-- FILTROS DE BUSQUEDA -->
                 <div class="filtros mb-4">
 
                     <h5>
@@ -463,7 +437,6 @@
                     <div class="row g-3 align-items-end">
 
                         <!-- ESTADO -->
-
                         <div class="col-md-3">
 
                             <label for="filtroEstado"
@@ -475,25 +448,15 @@
                                     class="form-select">
 
                                 <option value="">Todos</option>
-                                <option value="PENDIENTE">
-                                    Pendiente
-                                </option>
-                                <option value="CONFIRMADA">
-                                    Confirmada
-                                </option>
-                                <option value="ATENDIDA">
-                                    Atendida
-                                </option>
-                                <option value="CANCELADA">
-                                    Cancelada
-                                </option>
+                                <option value="PENDIENTE">Pendiente</option>
+                                <option value="CONFIRMADA">Confirmada</option>
+                                <option value="ATENDIDA">Atendida</option>
+                                <option value="CANCELADA">Cancelada</option>
 
                             </select>
-
                         </div>
 
                         <!-- SERVICIO -->
-
                         <div class="col-md-3">
 
                             <label for="filtroServicio"
@@ -506,20 +469,16 @@
 
                                 <option value="">Todos</option>
 
-                                <option
-                                    th:each="cita : ${citas}"
-                                    th:if="${cita.servicioVeterinario != null}"
-                                    th:value="${cita.servicioVeterinario.nombre}"
-                                    th:text="${cita.servicioVeterinario.nombre}">
+                                <option th:each="cita : ${citas}"
+                                        th:value="${cita.servicioVeterinario != null ? cita.servicioVeterinario.nombre : cita.servicio}"
+                                        th:text="${cita.servicioVeterinario != null ? cita.servicioVeterinario.nombre : cita.servicio}">
                                     Servicio
                                 </option>
 
                             </select>
-
                         </div>
 
                         <!-- BUSQUEDA -->
-
                         <div class="col-md-4">
 
                             <label for="busquedaGeneral"
@@ -528,72 +487,95 @@
                             </label>
 
                             <input id="busquedaGeneral"
-                                   type="search"
                                    class="form-control"
+                                   type="search"
                                    placeholder="Mascota, propietario, motivo...">
-
                         </div>
 
                         <!-- LIMPIAR -->
-
                         <div class="col-md-2">
 
                             <button id="btnLimpiar"
-                                    type="button"
-                                    class="btn btn-outline-secondary w-100">
+                                    class="btn btn-outline-secondary w-100"
+                                    type="button">
 
                                 <i class="fa-solid fa-broom"></i>
                                 Limpiar
-
                             </button>
-
                         </div>
 
                     </div>
+                </div>
+
+                <!-- CONTROL PAGINACION -->
+                <div class="d-flex justify-content-between
+                            align-items-center flex-wrap gap-2 mb-3">
+
+                    <div>
+                        Mostrar
+
+                        <select id="cantidadPagina"
+                                class="form-select d-inline-block w-auto mx-2">
+
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="0">Todos</option>
+
+                        </select>
+
+                        registros
+                    </div>
+
+                    <span id="informacionResultados"
+                          class="text-secondary">
+                    </span>
 
                 </div>
 
                 <!-- TABLA DE CITAS -->
-
                 <div class="tabla-contenedor">
 
                     <table id="tablaCitas"
-                           class="table table-bordered table-striped table-hover align-middle w-100">
+                           class="table table-bordered
+                                  table-striped table-hover
+                                  align-middle w-100">
 
+                        <!-- ENCABEZADOS CORREGIDOS -->
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Fecha / Hora</th>
-                                <th>Mascota</th>
-                                <th>Propietario</th>
-                                <th>Servicio veterinario</th>
-                                <th>Precio</th>
-                                <th>Duración</th>
-                                <th>Motivo</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Fecha / Hora</th>
+                                <th scope="col">Mascota</th>
+                                <th scope="col">Propietario</th>
+                                <th scope="col">Servicio veterinario</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Duración</th>
+                                <th scope="col">Motivo</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
 
                         <tbody>
 
-                            <tr th:each="cita : ${citas}">
+                            <tr th:each="cita : ${citas}"
+                                th:attr="data-estado=${cita.estado},
+                                         data-servicio=${cita.servicioVeterinario != null ? cita.servicioVeterinario.nombre : cita.servicio},
+                                         data-fecha=${#temporals.format(cita.fechaHora, 'yyyyMMddHHmm')}">
 
                                 <!-- ID -->
-
                                 <td th:text="${cita.idCita}">
                                     1
                                 </td>
 
-                                <!-- FECHA Y HORA -->
-
-                                <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}"
-                                    th:attr="data-order=${#temporals.format(cita.fechaHora, 'yyyyMMddHHmm')}">
-                                    Fecha
+                                <!-- FECHA -->
+                                <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">
+                                    01/01/2026 09:00
                                 </td>
 
                                 <!-- MASCOTA -->
-
                                 <td>
 
                                     <a th:href="@{/citas/mascota/{id}(id=${cita.mascota.idMascota})}"
@@ -605,7 +587,6 @@
                                 </td>
 
                                 <!-- PROPIETARIO -->
-
                                 <td>
 
                                     <span th:text="${cita.mascota.cliente.nombresRazonSocial}">
@@ -619,8 +600,7 @@
                                 </td>
 
                                 <!-- SERVICIO -->
-
-                                <td th:attr="data-search=${cita.servicioVeterinario != null ? cita.servicioVeterinario.nombre : cita.servicio}">
+                                <td>
 
                                     <span th:if="${cita.servicioVeterinario != null}"
                                           th:text="${cita.servicioVeterinario.nombre}">
@@ -635,7 +615,6 @@
                                 </td>
 
                                 <!-- PRECIO -->
-
                                 <td class="precio text-end">
 
                                     <span th:if="${cita.servicioVeterinario != null}"
@@ -650,7 +629,6 @@
                                 </td>
 
                                 <!-- DURACION -->
-
                                 <td class="text-center">
 
                                     <span th:if="${cita.servicioVeterinario != null and cita.servicioVeterinario.duracionMinutos != null}"
@@ -665,15 +643,12 @@
                                 </td>
 
                                 <!-- MOTIVO -->
-
                                 <td th:text="${cita.motivo}">
                                     Motivo
                                 </td>
 
                                 <!-- ESTADO -->
-
-                                <td class="text-center"
-                                    th:attr="data-search=${cita.estado}">
+                                <td class="text-center">
 
                                     <span class="badge"
                                           th:classappend="${cita.estado == 'PENDIENTE'} ? 'bg-warning text-dark' : (${cita.estado == 'CONFIRMADA'} ? 'bg-primary' : (${cita.estado == 'ATENDIDA'} ? 'bg-success' : 'bg-secondary'))"
@@ -684,12 +659,9 @@
                                 </td>
 
                                 <!-- ACCIONES -->
-
                                 <td>
 
                                     <div class="acciones">
-
-                                        <!-- EDITAR -->
 
                                         <a th:href="@{/citas/{id}/editar(id=${cita.idCita})}"
                                            class="btn btn-sm btn-outline-primary"
@@ -697,19 +669,16 @@
                                            aria-label="Editar cita">
 
                                             <i class="fa-solid fa-pen"></i>
-
                                         </a>
-
-                                        <!-- CAMBIAR ESTADO -->
 
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-success btnEstado"
-                                                th:attr="data-url=@{/citas/{id}/estado(id=${cita.idCita})},data-estado=${cita.estado}"
+                                                th:attr="data-url=@{/citas/{id}/estado(id=${cita.idCita})},
+                                                         data-estado=${cita.estado}"
                                                 title="Cambiar estado"
                                                 aria-label="Cambiar estado">
 
                                             <i class="fa-solid fa-arrows-rotate"></i>
-
                                         </button>
 
                                     </div>
@@ -719,13 +688,25 @@
                             </tr>
 
                         </tbody>
-
                     </table>
 
                 </div>
 
-                <!-- LEYENDA -->
+                <!-- SIN RESULTADOS -->
+                <div id="sinResultados"
+                     class="alert alert-info mt-3"
+                     style="display:none">
 
+                    No se encontraron citas con los filtros seleccionados.
+
+                </div>
+
+                <!-- PAGINACION -->
+                <div id="paginacion"
+                     class="paginacion mt-3">
+                </div>
+
+                <!-- LEYENDA -->
                 <div class="mt-3 text-muted small">
 
                     <strong>Acciones:</strong>
@@ -743,257 +724,475 @@
                 </div>
 
             </section>
-
         </main>
 
     </div>
-
 </div>
 
 <!-- FORMULARIO DE CAMBIO DE ESTADO -->
-<!-- Thymeleaf genera el token CSRF para el POST -->
-
 <form id="formCambioEstado"
       th:action="@{/citas}"
       method="post"
       class="d-none">
 
     <input type="hidden"
-           name="estado"
-           id="nuevoEstado">
-
+           id="nuevoEstado"
+           name="estado">
 </form>
 
-<!-- LIBRERIAS -->
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
-
+<!-- SWEETALERT -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
+<!-- JAVASCRIPT COMPLETO -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
+    "use strict";
 
-    // MENSAJES DEL CONTROLADOR
+    function iniciarCitas() {
 
-    const mensajeExito =
-        document.getElementById("mensajeExito");
+        const tabla =
+            document.getElementById("tablaCitas");
 
-    const mensajeError =
-        document.getElementById("mensajeError");
+        const filtroEstado =
+            document.getElementById("filtroEstado");
 
-    if (typeof Swal !== "undefined") {
+        const filtroServicio =
+            document.getElementById("filtroServicio");
 
-        if (mensajeExito) {
-            Swal.fire({
-                icon: "success",
-                title: "Operación exitosa",
-                text: mensajeExito.textContent.trim(),
-                confirmButtonColor: "#168f99"
-            });
-        }
+        const busqueda =
+            document.getElementById("busquedaGeneral");
 
-        if (mensajeError) {
-            Swal.fire({
-                icon: "error",
-                title: "No se pudo completar",
-                text: mensajeError.textContent.trim()
-            });
-        }
-    }
+        const limpiar =
+            document.getElementById("btnLimpiar");
 
-    // CAMBIO DE ESTADO DE CITAS
+        const cantidadPagina =
+            document.getElementById("cantidadPagina");
 
-    const formularioEstado =
-        document.getElementById("formCambioEstado");
+        const contador =
+            document.getElementById("contadorCitas");
 
-    const nuevoEstado =
-        document.getElementById("nuevoEstado");
+        const informacion =
+            document.getElementById("informacionResultados");
 
-    const estados = [
-        "PENDIENTE",
-        "CONFIRMADA",
-        "ATENDIDA",
-        "CANCELADA"
-    ];
+        const paginacion =
+            document.getElementById("paginacion");
 
-    document.addEventListener("click", function (evento) {
+        const sinResultados =
+            document.getElementById("sinResultados");
 
-        const boton =
-            evento.target.closest(".btnEstado");
+        const formCambioEstado =
+            document.getElementById("formCambioEstado");
 
-        if (!boton || typeof Swal === "undefined") {
+        const nuevoEstado =
+            document.getElementById("nuevoEstado");
+
+        if (!tabla || !filtroEstado || !filtroServicio ||
+            !busqueda || !limpiar) {
+
+            console.error(
+                "VetControl: faltan controles del listado de citas."
+            );
             return;
         }
 
-        const opciones = {};
+        // TODAS LAS FILAS
+        const filas = Array.from(
+            tabla.querySelectorAll("tbody tr")
+        );
 
-        estados.forEach(function (estado) {
-            opciones[estado] = estado;
+        // ORDENAR CITAS POR FECHA DESCENDENTE
+        filas.sort(function (a, b) {
+
+            const fechaA = a.dataset.fecha || "";
+            const fechaB = b.dataset.fecha || "";
+
+            return fechaB.localeCompare(fechaA);
         });
 
-        Swal.fire({
-            title: "Cambiar estado de la cita",
-            input: "select",
-            inputOptions: opciones,
-            inputValue: boton.getAttribute("data-estado"),
-            showCancelButton: true,
-            confirmButtonColor: "#168f99",
-            confirmButtonText: "Guardar",
-            cancelButtonText: "Cancelar",
-            inputValidator: function (value) {
-                if (!value) {
-                    return "Seleccione un estado";
-                }
-            }
-        }).then(function (resultado) {
+        filas.forEach(function (fila) {
+            tabla.tBodies[0].appendChild(fila);
+        });
 
-            if (!resultado.isConfirmed) {
+        let paginaActual = 1;
+
+        // NORMALIZAR ACENTOS Y MAYUSCULAS
+        function normalizar(valor) {
+
+            return String(valor || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toUpperCase()
+                .trim();
+        }
+
+        // ELIMINAR SERVICIOS REPETIDOS
+        const serviciosVistos = new Set();
+
+        Array.from(filtroServicio.options)
+            .slice(1)
+            .forEach(function (opcion) {
+
+                const nombre =
+                    normalizar(opcion.value);
+
+                if (!nombre ||
+                    serviciosVistos.has(nombre)) {
+
+                    opcion.remove();
+
+                } else {
+
+                    serviciosVistos.add(nombre);
+                }
+            });
+
+        // FILTRO COMBINADO
+        function cumpleFiltros(fila) {
+
+            const estadoFila =
+                normalizar(fila.dataset.estado);
+
+            const servicioFila =
+                normalizar(fila.dataset.servicio);
+
+            const estadoElegido =
+                normalizar(filtroEstado.value);
+
+            const servicioElegido =
+                normalizar(filtroServicio.value);
+
+            const textoElegido =
+                normalizar(busqueda.value);
+
+            const mascota =
+                normalizar(fila.cells[2]?.textContent);
+
+            const propietario =
+                normalizar(fila.cells[3]?.textContent);
+
+            const servicio =
+                normalizar(fila.cells[4]?.textContent);
+
+            const motivo =
+                normalizar(fila.cells[7]?.textContent);
+
+            const coincideEstado =
+                !estadoElegido ||
+                estadoFila === estadoElegido;
+
+            const coincideServicio =
+                !servicioElegido ||
+                servicioFila === servicioElegido;
+
+            const coincideTexto =
+                !textoElegido ||
+                mascota.includes(textoElegido) ||
+                propietario.includes(textoElegido) ||
+                servicio.includes(textoElegido) ||
+                motivo.includes(textoElegido);
+
+            return coincideEstado &&
+                   coincideServicio &&
+                   coincideTexto;
+        }
+
+        // BOTON DE PAGINACION
+        function crearBoton(texto, destino,
+                            deshabilitado, actual) {
+
+            const boton =
+                document.createElement("button");
+
+            boton.type = "button";
+            boton.textContent = texto;
+            boton.disabled = deshabilitado;
+
+            if (actual) {
+                boton.classList.add("actual");
+            }
+
+            boton.addEventListener("click", function () {
+
+                paginaActual = destino;
+                aplicarFiltros();
+            });
+
+            return boton;
+        }
+
+        // APLICAR FILTROS Y PAGINACION
+        function aplicarFiltros() {
+
+            const filtradas =
+                filas.filter(cumpleFiltros);
+
+            const total = filtradas.length;
+
+            const seleccion =
+                Number(cantidadPagina.value);
+
+            const porPagina =
+                seleccion === 0 ?
+                Math.max(total, 1) :
+                seleccion;
+
+            const totalPaginas =
+                Math.max(
+                    1,
+                    Math.ceil(total / porPagina)
+                );
+
+            if (paginaActual > totalPaginas) {
+                paginaActual = totalPaginas;
+            }
+
+            if (paginaActual < 1) {
+                paginaActual = 1;
+            }
+
+            const inicio =
+                (paginaActual - 1) * porPagina;
+
+            const fin =
+                inicio + porPagina;
+
+            // OCULTAR TODAS
+            filas.forEach(function (fila) {
+
+                fila.hidden = true;
+                fila.style.display = "none";
+            });
+
+            // MOSTRAR SOLO PAGINA ACTUAL
+            filtradas.slice(inicio, fin)
+                .forEach(function (fila) {
+
+                    fila.hidden = false;
+                    fila.style.display = "";
+                });
+
+            // ACTUALIZAR CONTADOR
+            const hayFiltros =
+                filtroEstado.value ||
+                filtroServicio.value ||
+                busqueda.value.trim();
+
+            if (hayFiltros) {
+
+                contador.textContent =
+                    total + " de " +
+                    filas.length +
+                    " citas encontradas";
+
+            } else {
+
+                contador.textContent =
+                    filas.length +
+                    " citas registradas";
+            }
+
+            if (total === 0) {
+
+                informacion.textContent =
+                    "Mostrando 0 citas";
+
+            } else {
+
+                informacion.textContent =
+                    "Mostrando " +
+                    (inicio + 1) + " a " +
+                    Math.min(fin, total) +
+                    " de " + total + " citas";
+            }
+
+            sinResultados.style.display =
+                total === 0 ? "block" : "none";
+
+            paginacion.innerHTML = "";
+
+            if (totalPaginas <= 1) {
                 return;
             }
 
-            formularioEstado.action =
+            paginacion.appendChild(
+                crearBoton(
+                    "Anterior",
+                    paginaActual - 1,
+                    paginaActual === 1,
+                    false
+                )
+            );
+
+            for (let numero = 1;
+                 numero <= totalPaginas;
+                 numero++) {
+
+                paginacion.appendChild(
+                    crearBoton(
+                        String(numero),
+                        numero,
+                        false,
+                        numero === paginaActual
+                    )
+                );
+            }
+
+            paginacion.appendChild(
+                crearBoton(
+                    "Siguiente",
+                    paginaActual + 1,
+                    paginaActual === totalPaginas,
+                    false
+                )
+            );
+        }
+
+        // EVENTOS DE FILTROS
+        filtroEstado.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        filtroServicio.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        busqueda.addEventListener("input", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        cantidadPagina.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // BOTON LIMPIAR
+        limpiar.addEventListener("click", function () {
+
+            filtroEstado.value = "";
+            filtroServicio.value = "";
+            busqueda.value = "";
+            cantidadPagina.value = "10";
+
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // CAMBIO DE ESTADO
+        const estados = [
+            "PENDIENTE",
+            "CONFIRMADA",
+            "ATENDIDA",
+            "CANCELADA"
+        ];
+
+        document.addEventListener("click", function (evento) {
+
+            const boton =
+                evento.target.closest(".btnEstado");
+
+            if (!boton) {
+                return;
+            }
+
+            const url =
                 boton.getAttribute("data-url");
 
-            nuevoEstado.value = resultado.value;
+            if (!url || !formCambioEstado || !nuevoEstado) {
+                return;
+            }
 
-            HTMLFormElement.prototype.submit.call(
-                formularioEstado
-            );
-        });
-    });
+            const estadoActual =
+                boton.getAttribute("data-estado");
 
-    // EVITAR SERVICIOS REPETIDOS EN EL SELECT
+            if (typeof Swal !== "undefined") {
 
-    const filtroServicio =
-        document.getElementById("filtroServicio");
+                const opciones = {};
 
-    const serviciosVistos = new Set();
+                estados.forEach(function (estado) {
+                    opciones[estado] = estado;
+                });
 
-    Array.from(filtroServicio.options)
-        .slice(1)
-        .forEach(function (opcion) {
+                Swal.fire({
+                    title: "Cambiar estado de la cita",
+                    input: "select",
+                    inputOptions: opciones,
+                    inputValue: estadoActual,
+                    showCancelButton: true,
+                    confirmButtonText: "Guardar",
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#168f99",
+                    inputValidator: function (valor) {
+                        if (!valor) {
+                            return "Seleccione un estado";
+                        }
+                    }
+                }).then(function (resultado) {
 
-            const nombre = opcion.value.trim();
+                    if (!resultado.isConfirmed) {
+                        return;
+                    }
 
-            if (serviciosVistos.has(nombre)) {
-                opcion.remove();
+                    formCambioEstado.action = url;
+                    nuevoEstado.value = resultado.value;
+
+                    HTMLFormElement.prototype.submit.call(
+                        formCambioEstado
+                    );
+                });
+
             } else {
-                serviciosVistos.add(nombre);
+
+                const elegido = window.prompt(
+                    "Estado: PENDIENTE, CONFIRMADA, " +
+                    "ATENDIDA o CANCELADA",
+                    estadoActual
+                );
+
+                if (elegido === null) {
+                    return;
+                }
+
+                const valor =
+                    normalizar(elegido);
+
+                if (!estados.includes(valor)) {
+
+                    alert("Seleccione un estado válido.");
+                    return;
+                }
+
+                formCambioEstado.action = url;
+                nuevoEstado.value = valor;
+
+                HTMLFormElement.prototype.submit.call(
+                    formCambioEstado
+                );
             }
         });
 
-    // DATATABLES
+        // INICIALIZAR
+        aplicarFiltros();
 
-    if (typeof DataTable === "undefined") {
-        console.error(
-            "DataTables no está disponible"
+        console.log(
+            "VetControl Perú: listado de citas inicializado."
         );
-        return;
     }
 
-    const tabla = new DataTable("#tablaCitas", {
+    if (document.readyState === "loading") {
 
-        pageLength: 10,
-        lengthMenu: [5, 10, 25, 50],
-
-        // ORDENAR POR FECHA MAS RECIENTE
-        order: [Array.of(1, "desc")],
-
-        layout: {
-            topStart: "pageLength",
-            topEnd: null,
-            bottomStart: "info",
-            bottomEnd: "paging"
-        },
-
-        language: {
-            lengthMenu: "Mostrar _MENU_ registros",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ citas",
-            infoEmpty: "Sin citas",
-            infoFiltered: "(filtradas de _MAX_ citas)",
-            zeroRecords: "No se encontraron resultados",
-            emptyTable: "No hay citas registradas",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: "Siguiente",
-                previous: "Anterior"
-            }
-        },
-
-        columnDefs: [{
-            targets: 9,
-            orderable: false,
-            searchable: false
-        }]
-    });
-
-    // FILTROS
-
-    const filtroEstado =
-        document.getElementById("filtroEstado");
-
-    const busquedaGeneral =
-        document.getElementById("busquedaGeneral");
-
-    const btnLimpiar =
-        document.getElementById("btnLimpiar");
-
-    function filtrar() {
-
-        tabla.column(8).search(
-            filtroEstado.value,
-            { exact: true }
+        document.addEventListener(
+            "DOMContentLoaded",
+            iniciarCitas
         );
 
-        tabla.column(4).search(
-            filtroServicio.value,
-            { exact: true }
-        );
+    } else {
 
-        tabla.search(
-            busquedaGeneral.value.trim()
-        );
-
-        tabla.draw();
+        iniciarCitas();
     }
-
-    filtroEstado.addEventListener(
-        "change", filtrar
-    );
-
-    filtroServicio.addEventListener(
-        "change", filtrar
-    );
-
-    busquedaGeneral.addEventListener(
-        "input", filtrar
-    );
-
-    // LIMPIAR FILTROS
-
-    btnLimpiar.addEventListener("click", function () {
-
-        filtroEstado.value = "";
-        filtroServicio.value = "";
-        busquedaGeneral.value = "";
-
-        tabla.search("");
-        tabla.columns().search("");
-        tabla.draw();
-    });
-
-    console.log(
-        "VetControl Perú: módulo Citas inicializado"
-    );
-
-});
+})();
 </script>
 
 </body>

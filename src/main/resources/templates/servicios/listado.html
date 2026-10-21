@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1">
 
     <title>Servicios Veterinarios | VetControl Perú</title>
 
@@ -15,17 +15,11 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css">
-
     <style>
         :root {
             --azul: #143e60;
-            --turquesa: #168e98;
             --fondo: #edf5f8;
         }
-
-        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -50,54 +44,49 @@
         .marca {
             text-align: center;
             padding: 15px 0 28px;
-            margin-bottom: 24px;
             border-bottom: 1px solid #ffffff35;
-        }
-
-        .marca i {
-            font-size: 40px;
-            color: #7ce1d9;
+            margin-bottom: 24px;
         }
 
         .marca h2 {
             font-size: 25px;
-            font-weight: 700;
-            margin: 12px 0 3px;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-        .marca h2 span { color: #7ce1d9; }
+        .marca h2 span {
+            color: #7ce1d9;
+        }
 
         .marca small {
+            letter-spacing: 4px;
             color: #b8ebe8;
-            letter-spacing: 5px;
         }
 
         .enlace-menu {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: block;
             color: white;
             text-decoration: none;
-            padding: 14px 15px;
-            border-radius: 11px;
-            margin-bottom: 8px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            margin-bottom: 7px;
         }
 
         .enlace-menu:hover,
         .enlace-menu.activo {
-            background: #ffffff28;
             color: white;
+            background: #ffffff28;
         }
 
         .salir {
-            background: #bb3943;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 14px;
             width: 100%;
+            margin-top: 20px;
+            background: #b83b46;
+            color: white;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px;
             text-align: left;
-            margin-top: 25px;
         }
 
         .principal {
@@ -109,56 +98,54 @@
             background: white;
             padding: 22px 30px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             gap: 15px;
-            box-shadow: 0 2px 10px #0000000a;
         }
 
         .cabecera h1 {
             font-size: 25px;
-            font-weight: 700;
+            font-weight: bold;
             margin: 0;
         }
 
         .contenido {
             max-width: 1600px;
             margin: auto;
-            padding: 30px;
+            padding: 28px;
         }
 
         .tarjeta {
             background: white;
-            border: 1px solid #e0eaf0;
+            padding: 25px;
             border-radius: 18px;
-            padding: 26px;
-            box-shadow: 0 6px 22px #123e6310;
+            border: 1px solid #dce8ee;
         }
 
         .titulo {
-            color: var(--azul);
-            font-weight: 700;
-        }
-
-        .filtros {
-            background: #f5f9fb;
-            border: 1px solid #dce9ee;
-            border-radius: 13px;
-            padding: 20px;
-        }
-
-        .filtros h5 {
-            font-weight: 700;
-            font-size: 16px;
+            color: #143e60;
+            font-weight: bold;
         }
 
         .contador {
             display: inline-block;
-            background: #d8f7e8;
-            color: #14744c;
-            font-weight: 600;
+            background: #d7f7e7;
+            color: #08734d;
             border-radius: 25px;
-            padding: 9px 15px;
+            padding: 10px 17px;
+            font-weight: 600;
+        }
+
+        .filtros {
+            background: #f5f9fb;
+            border: 1px solid #dae7ee;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .filtros h5 {
+            font-size: 17px;
+            font-weight: bold;
         }
 
         .table thead th {
@@ -174,44 +161,84 @@
 
         .precio {
             color: #146c63;
-            font-weight: 700;
+            font-weight: bold;
             white-space: nowrap;
         }
 
-        .estado-activo,
-        .estado-inactivo {
+        .estado-activo {
             display: inline-block;
-            padding: 7px 12px;
-            border-radius: 24px;
+            padding: 8px 13px;
+            color: #08734d;
+            background: #d7f7e7;
+            border-radius: 25px;
             font-weight: 600;
         }
 
-        .estado-activo {
-            background: #d8f7e8;
-            color: #157347;
-        }
-
         .estado-inactivo {
-            background: #fce0e0;
-            color: #ad3838;
+            display: inline-block;
+            padding: 8px 13px;
+            color: #b63737;
+            background: #fde1e1;
+            border-radius: 25px;
+            font-weight: 600;
         }
 
         .acciones {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
             gap: 7px;
-            min-width: 170px;
+            min-width: 175px;
         }
 
-        .acciones form { margin: 0; }
+        .acciones form {
+            margin: 0;
+        }
+
+        .paginacion {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .paginacion button {
+            border: 1px solid #c6d5e0;
+            border-radius: 7px;
+            padding: 6px 13px;
+            background: white;
+            color: #174968;
+        }
+
+        .paginacion button:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .paginacion .actual {
+            color: white;
+            background: #16486b;
+        }
 
         @media (max-width: 900px) {
-            .aplicacion { flex-direction: column; }
-            .menu { width: 100%; }
-            .cabecera { flex-wrap: wrap; padding: 18px; }
-            .contenido { padding: 15px; }
-            .tarjeta { padding: 16px; }
+            .aplicacion {
+                flex-direction: column;
+            }
+
+            .menu {
+                width: 100%;
+            }
+
+            .cabecera {
+                flex-wrap: wrap;
+            }
+
+            .contenido {
+                padding: 15px;
+            }
+
+            .tarjeta {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -224,7 +251,7 @@
     <aside class="menu">
 
         <div class="marca">
-            <i class="fa-solid fa-heart-pulse"></i>
+            <i class="fa-solid fa-heart-pulse fa-2x"></i>
             <h2>Vet<span>Control</span></h2>
             <small>PERÚ</small>
         </div>
@@ -232,41 +259,26 @@
         <nav aria-label="Menú principal">
 
             <a th:href="@{/dashboard}" class="enlace-menu">
-                <i class="fa-solid fa-house"></i>
-                Inicio
+                <i class="fa-solid fa-house"></i> Inicio
             </a>
 
             <a th:href="@{/clientes}" class="enlace-menu">
-                <i class="fa-solid fa-users"></i>
-                Clientes
+                <i class="fa-solid fa-users"></i> Clientes
             </a>
 
             <a th:href="@{/mascotas}" class="enlace-menu">
-                <i class="fa-solid fa-paw"></i>
-                Mascotas
+                <i class="fa-solid fa-paw"></i> Mascotas
             </a>
 
             <a th:href="@{/citas}" class="enlace-menu">
-                <i class="fa-solid fa-calendar-check"></i>
-                Citas
+                <i class="fa-solid fa-calendar"></i> Citas
             </a>
 
             <a th:href="@{/servicios}"
-               class="enlace-menu activo"
-               aria-current="page">
-                <i class="fa-solid fa-stethoscope"></i>
-                Servicios
+               class="enlace-menu activo">
+                <i class="fa-solid fa-stethoscope"></i> Servicios
             </a>
-<!---->
-<a th:href="@{/productos}" class="enlace-menu">
-    <i class="fa-solid fa-boxes-stacked"></i>
-    Productos
-</a>
 
-<a th:href="@{/inventario}" class="enlace-menu">
-    <i class="fa-solid fa-right-left"></i>
-    Movimientos
-</a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="salir">
                     <i class="fa-solid fa-right-from-bracket"></i>
@@ -277,7 +289,7 @@
         </nav>
     </aside>
 
-    <!-- AREA PRINCIPAL -->
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="principal">
 
         <header class="cabecera">
@@ -289,7 +301,6 @@
 
             <a th:href="@{/dashboard}"
                class="btn btn-outline-primary">
-                <i class="fa-solid fa-arrow-left"></i>
                 Volver al Dashboard
             </a>
 
@@ -299,13 +310,15 @@
 
             <section class="tarjeta">
 
-                <div class="d-flex flex-wrap
-                            justify-content-between
-                            align-items-center gap-3 mb-4">
+                <div class="d-flex justify-content-between
+                            align-items-center flex-wrap gap-3 mb-4">
 
                     <div>
-                        <h2 class="titulo">Servicios Veterinarios</h2>
-                        <p class="text-secondary mb-0">
+                        <h2 class="titulo">
+                            Servicios Veterinarios
+                        </h2>
+
+                        <p class="text-secondary">
                             Administra tratamientos, consultas,
                             precios y disponibilidad.
                         </p>
@@ -319,20 +332,23 @@
 
                 </div>
 
-                <!-- MENSAJES -->
-                <div id="mensajeExito"
-                     th:if="${mensajeExito}"
-                     th:text="${mensajeExito}"
-                     class="d-none"></div>
+                <!-- MENSAJES DEL CONTROLADOR -->
+                <div th:if="${mensajeExito}"
+                     id="mensajeExito"
+                     class="alert alert-success"
+                     th:text="${mensajeExito}">
+                </div>
 
-                <div id="mensajeError"
-                     th:if="${mensajeError}"
-                     th:text="${mensajeError}"
-                     class="d-none"></div>
+                <div th:if="${mensajeError}"
+                     id="mensajeError"
+                     class="alert alert-danger"
+                     th:text="${mensajeError}">
+                </div>
 
                 <!-- CONTADOR -->
                 <div class="mb-4">
-                    <span class="contador"
+                    <span id="contadorServicios"
+                          class="contador"
                           th:text="${#lists.size(servicios)} + ' servicios registrados'">
                         0 servicios registrados
                     </span>
@@ -348,9 +364,11 @@
 
                     <div class="row g-3 align-items-end">
 
+                        <!-- FILTRO CATEGORIA -->
                         <div class="col-md-3">
-                            <label class="form-label"
-                                   for="filtroCategoria">
+
+                            <label for="filtroCategoria"
+                                   class="form-label">
                                 Categoría
                             </label>
 
@@ -362,54 +380,89 @@
                                 <option th:each="categoria : ${categorias}"
                                         th:value="${categoria}"
                                         th:text="${categoria == 'BANIO' ? 'BAÑO' :
-                                                 (categoria == 'VACUNACION' ? 'VACUNACIÓN' :
-                                                 (categoria == 'ESTERILIZACION' ? 'ESTERILIZACIÓN' :
-                                                 (categoria == 'CIRUGIA' ? 'CIRUGÍA' :
-                                                 (categoria == 'DESPARASITACION' ? 'DESPARASITACIÓN' :
-                                                 (categoria == 'PELUQUERIA' ? 'PELUQUERÍA' :
-                                                 (categoria == 'HOSPITALIZACION' ? 'HOSPITALIZACIÓN' : categoria))))))}">
-                                    Categoría
+                                         (categoria == 'VACUNACION' ? 'VACUNACIÓN' :
+                                         (categoria == 'ESTERILIZACION' ? 'ESTERILIZACIÓN' :
+                                         (categoria == 'CIRUGIA' ? 'CIRUGÍA' :
+                                         (categoria == 'DESPARASITACION' ? 'DESPARASITACIÓN' :
+                                         (categoria == 'PELUQUERIA' ? 'PELUQUERÍA' :
+                                         (categoria == 'HOSPITALIZACION' ? 'HOSPITALIZACIÓN' : categoria))))))}">
                                 </option>
 
                             </select>
                         </div>
 
+                        <!-- FILTRO ESTADO -->
                         <div class="col-md-3">
-                            <label class="form-label"
-                                   for="filtroEstado">
+
+                            <label for="filtroEstado"
+                                   class="form-label">
                                 Estado
                             </label>
 
                             <select id="filtroEstado"
                                     class="form-select">
+
                                 <option value="">Todos</option>
                                 <option value="ACTIVO">Activo</option>
                                 <option value="INACTIVO">Inactivo</option>
+
                             </select>
                         </div>
 
+                        <!-- BUSQUEDA TEXTO -->
                         <div class="col-md-4">
-                            <label class="form-label"
-                                   for="busquedaGeneral">
+
+                            <label for="busquedaGeneral"
+                                   class="form-label">
                                 Buscar servicio
                             </label>
 
-                            <input id="busquedaGeneral"
-                                   type="search"
+                            <input type="search"
+                                   id="busquedaGeneral"
                                    class="form-control"
                                    placeholder="Nombre o descripción">
                         </div>
 
+                        <!-- BOTON LIMPIAR -->
                         <div class="col-md-2">
+
                             <button type="button"
                                     id="btnLimpiar"
                                     class="btn btn-outline-secondary w-100">
                                 <i class="fa-solid fa-broom"></i>
                                 Limpiar
                             </button>
-                        </div>
 
+                        </div>
                     </div>
+                </div>
+
+                <!-- SELECTOR DE REGISTROS -->
+                <div class="d-flex justify-content-between
+                            align-items-center flex-wrap gap-2 mb-3">
+
+                    <div>
+                        <label for="cantidadPagina">
+                            Mostrar
+                        </label>
+
+                        <select id="cantidadPagina"
+                                class="form-select d-inline-block w-auto mx-2">
+
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="0">Todos</option>
+
+                        </select>
+
+                        registros
+                    </div>
+
+                    <span id="informacionResultados"
+                          class="text-secondary">
+                    </span>
                 </div>
 
                 <!-- TABLA -->
@@ -420,105 +473,126 @@
                                   table-hover align-middle w-100">
 
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th>Descripción</th>
-                                <th>Precio</th>
-                                <th>Duración</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Duración</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            <tr th:each="servicio : ${servicios}">
 
-                                <td th:text="${servicio.idServicio}"></td>
+                        <tr th:each="servicio : ${servicios}"
+                            th:attr="data-categoria=${servicio.categoria},
+                                     data-estado=${servicio.activo == true ? 'ACTIVO' : 'INACTIVO'}">
 
-                                <td th:text="${servicio.nombre}"></td>
+                            <td th:text="${servicio.idServicio}">1</td>
 
-                                <!-- VALOR REAL PARA FILTRAR;
-                                     ETIQUETA AMIGABLE EN PANTALLA -->
-                                <td th:attr="data-search=${servicio.categoria}"
-                                    th:text="${servicio.categoria == 'BANIO' ? 'BAÑO' :
-                                             (servicio.categoria == 'VACUNACION' ? 'VACUNACIÓN' :
-                                             (servicio.categoria == 'ESTERILIZACION' ? 'ESTERILIZACIÓN' :
-                                             (servicio.categoria == 'CIRUGIA' ? 'CIRUGÍA' :
-                                             (servicio.categoria == 'DESPARASITACION' ? 'DESPARASITACIÓN' :
-                                             (servicio.categoria == 'PELUQUERIA' ? 'PELUQUERÍA' :
-                                             (servicio.categoria == 'HOSPITALIZACION' ? 'HOSPITALIZACIÓN' : servicio.categoria))))))}">
-                                </td>
+                            <td th:text="${servicio.nombre}">
+                                Baño básico
+                            </td>
 
-                                <td th:text="${servicio.descripcion}"></td>
+                            <td th:text="${servicio.categoria == 'BANIO' ? 'BAÑO' :
+                                     (servicio.categoria == 'VACUNACION' ? 'VACUNACIÓN' :
+                                     (servicio.categoria == 'ESTERILIZACION' ? 'ESTERILIZACIÓN' :
+                                     (servicio.categoria == 'CIRUGIA' ? 'CIRUGÍA' :
+                                     (servicio.categoria == 'DESPARASITACION' ? 'DESPARASITACIÓN' :
+                                     (servicio.categoria == 'PELUQUERIA' ? 'PELUQUERÍA' :
+                                     (servicio.categoria == 'HOSPITALIZACION' ? 'HOSPITALIZACIÓN' : servicio.categoria))))))}">
+                                BAÑO
+                            </td>
 
-                                <td class="precio text-end"
-                                    th:text="${'S/ ' + #numbers.formatDecimal(servicio.precioReferencial, 1, 2)}">
-                                    S/ 0.00
-                                </td>
+                            <td th:text="${servicio.descripcion}">
+                                Descripción
+                            </td>
 
-                                <td class="text-center">
-                                    <span th:if="${servicio.duracionMinutos != null}"
-                                          th:text="${servicio.duracionMinutos + ' min'}">
-                                        30 min
-                                    </span>
-                                    <span th:unless="${servicio.duracionMinutos != null}">
-                                        -
-                                    </span>
-                                </td>
+                            <td class="precio text-end"
+                                th:text="${'S/ ' + #numbers.formatDecimal(servicio.precioReferencial, 1, 2)}">
+                                S/ 0.00
+                            </td>
 
-                                <td class="text-center"
-                                    th:attr="data-search=${servicio.activo == true ? 'ACTIVO' : 'INACTIVO'}">
+                            <td class="text-center">
 
-                                    <span th:if="${servicio.activo == true}"
-                                          class="estado-activo">
-                                        Activo
-                                    </span>
+                                <span th:if="${servicio.duracionMinutos != null}"
+                                      th:text="${servicio.duracionMinutos + ' min'}">
+                                    30 min
+                                </span>
 
-                                    <span th:unless="${servicio.activo == true}"
-                                          class="estado-inactivo">
-                                        Inactivo
-                                    </span>
-                                </td>
+                                <span th:unless="${servicio.duracionMinutos != null}">
+                                    -
+                                </span>
+                            </td>
 
-                                <td>
-                                    <div class="acciones">
+                            <td class="text-center">
 
-                                        <a th:href="@{/servicios/{id}/editar(id=${servicio.idServicio})}"
-                                           class="btn btn-warning btn-sm"
-                                           title="Editar servicio">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                            Editar
-                                        </a>
+                                <span th:if="${servicio.activo == true}"
+                                      class="estado-activo">
+                                    Activo
+                                </span>
 
-                                        <form class="formEstado"
-                                              th:action="@{/servicios/{id}/cambiar-estado(id=${servicio.idServicio})}"
-                                              method="post">
+                                <span th:unless="${servicio.activo == true}"
+                                      class="estado-inactivo">
+                                    Inactivo
+                                </span>
+                            </td>
 
-                                            <input type="hidden"
-                                                   class="estadoActual"
-                                                   th:value="${servicio.activo == true ? 'Activo' : 'Inactivo'}">
+                            <td>
+                                <div class="acciones">
 
-                                            <button type="submit"
-                                                    class="btn btn-sm"
-                                                    th:classappend="${servicio.activo == true ? 'btn-danger' : 'btn-success'}">
+                                    <!-- EDITAR -->
+                                    <a th:href="@{/servicios/{id}/editar(id=${servicio.idServicio})}"
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        Editar
+                                    </a>
 
-                                                <span th:if="${servicio.activo == true}">
-                                                    Desactivar
-                                                </span>
+                                    <!-- ACTIVAR / DESACTIVAR -->
+                                    <form class="formEstado"
+                                          th:action="@{/servicios/{id}/cambiar-estado(id=${servicio.idServicio})}"
+                                          method="post">
 
-                                                <span th:unless="${servicio.activo == true}">
-                                                    Activar
-                                                </span>
-                                            </button>
-                                        </form>
+                                        <input type="hidden"
+                                               class="estadoActual"
+                                               th:value="${servicio.activo == true ? 'Activo' : 'Inactivo'}">
 
-                                    </div>
-                                </td>
-                            </tr>
+                                        <button type="submit"
+                                                class="btn btn-sm"
+                                                th:classappend="${servicio.activo == true ? 'btn-danger' : 'btn-success'}">
+
+                                            <span th:if="${servicio.activo == true}">
+                                                Desactivar
+                                            </span>
+
+                                            <span th:unless="${servicio.activo == true}">
+                                                Activar
+                                            </span>
+
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
                         </tbody>
                     </table>
+                </div>
+
+                <!-- MENSAJE CUANDO NO HAY RESULTADOS -->
+                <div id="sinResultados"
+                     class="alert alert-info mt-3"
+                     style="display:none">
+
+                    No se encontraron servicios con los filtros seleccionados.
+                </div>
+
+                <!-- PAGINACION -->
+                <div id="paginacion"
+                     class="paginacion mt-3">
                 </div>
 
             </section>
@@ -526,156 +600,340 @@
     </div>
 </div>
 
-<!-- LIBRERIAS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
+<!-- JAVASCRIPT SIN DATATABLES -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
+    "use strict";
 
-    const mensajeExito = document.getElementById("mensajeExito");
-    const mensajeError = document.getElementById("mensajeError");
+    function iniciarServicios() {
 
-    if (typeof Swal !== "undefined") {
+        const tabla =
+            document.getElementById("tablaServicios");
 
-        if (mensajeExito) {
-            Swal.fire({
-                icon: "success",
-                title: "Operación exitosa",
-                text: mensajeExito.textContent.trim(),
-                confirmButtonColor: "#168e98"
-            });
+        const categoria =
+            document.getElementById("filtroCategoria");
+
+        const estado =
+            document.getElementById("filtroEstado");
+
+        const busqueda =
+            document.getElementById("busquedaGeneral");
+
+        const botonLimpiar =
+            document.getElementById("btnLimpiar");
+
+        const cantidadPagina =
+            document.getElementById("cantidadPagina");
+
+        const contador =
+            document.getElementById("contadorServicios");
+
+        const informacion =
+            document.getElementById("informacionResultados");
+
+        const paginacion =
+            document.getElementById("paginacion");
+
+        const sinResultados =
+            document.getElementById("sinResultados");
+
+        if (!tabla || !categoria || !estado ||
+            !busqueda || !botonLimpiar) {
+
+            console.error(
+                "VetControl: no se encontraron los controles de filtros."
+            );
+
+            return;
         }
 
-        if (mensajeError) {
-            Swal.fire({
-                icon: "error",
-                title: "No se pudo completar",
-                text: mensajeError.textContent.trim()
-            });
+        // GUARDAR TODAS LAS FILAS ORIGINALES
+        const filas = Array.from(
+            tabla.querySelectorAll("tbody tr")
+        );
+
+        let paginaActual = 1;
+
+        // NORMALIZAR TEXTO
+        function normalizar(texto) {
+
+            return String(texto || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim()
+                .toUpperCase();
         }
-    }
 
-    // CONFIRMACION DE CAMBIO DE ESTADO
-    document.querySelectorAll(".formEstado")
-        .forEach(function (formulario) {
+        // COMPROBAR CATEGORIA + ESTADO + BUSQUEDA
+        function cumpleFiltros(fila) {
 
-            formulario.addEventListener("submit", function (evento) {
+            const categoriaFila =
+                normalizar(fila.dataset.categoria);
 
-                if (typeof Swal === "undefined") {
-                    return;
-                }
+            const estadoFila =
+                normalizar(fila.dataset.estado);
 
-                evento.preventDefault();
+            const categoriaElegida =
+                normalizar(categoria.value);
 
-                const estado =
-                    formulario.querySelector(".estadoActual").value;
+            const estadoElegido =
+                normalizar(estado.value);
 
-                const accion =
-                    estado === "Activo" ? "desactivar" : "activar";
+            const textoElegido =
+                normalizar(busqueda.value);
 
-                Swal.fire({
-                    title: "¿Desea " + accion + " este servicio?",
-                    text: "El registro no será eliminado.",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonColor: "#168e98",
-                    confirmButtonText: "Sí, confirmar",
-                    cancelButtonText: "Cancelar"
-                }).then(function (resultado) {
+            const nombreFila =
+                normalizar(fila.cells[1]?.textContent);
 
-                    if (resultado.isConfirmed) {
-                        HTMLFormElement.prototype.submit.call(formulario);
+            const descripcionFila =
+                normalizar(fila.cells[3]?.textContent);
+
+            const coincideCategoria =
+                categoriaElegida === "" ||
+                categoriaFila === categoriaElegida;
+
+            const coincideEstado =
+                estadoElegido === "" ||
+                estadoFila === estadoElegido;
+
+            const coincideTexto =
+                textoElegido === "" ||
+                nombreFila.includes(textoElegido) ||
+                descripcionFila.includes(textoElegido);
+
+            return coincideCategoria &&
+                   coincideEstado &&
+                   coincideTexto;
+        }
+
+        // CREAR BOTON DE PAGINACION
+        function crearBoton(texto, destino, deshabilitado,
+                            seleccionado) {
+
+            const boton = document.createElement("button");
+
+            boton.type = "button";
+            boton.textContent = texto;
+
+            boton.disabled = deshabilitado;
+
+            if (seleccionado) {
+                boton.classList.add("actual");
+            }
+
+            boton.addEventListener("click", function () {
+                paginaActual = destino;
+                aplicarFiltros();
+            });
+
+            return boton;
+        }
+
+        // FILTRAR + PAGINAR
+        function aplicarFiltros() {
+
+            const filtradas = filas.filter(cumpleFiltros);
+
+            const total = filtradas.length;
+
+            const seleccion = Number(cantidadPagina.value);
+
+            const porPagina =
+                seleccion === 0 ?
+                Math.max(total, 1) : seleccion;
+
+            const totalPaginas =
+                Math.max(1, Math.ceil(total / porPagina));
+
+            if (paginaActual > totalPaginas) {
+                paginaActual = totalPaginas;
+            }
+
+            if (paginaActual < 1) {
+                paginaActual = 1;
+            }
+
+            const inicio = (paginaActual - 1) * porPagina;
+
+            const fin = inicio + porPagina;
+
+            // OCULTAR TODAS LAS FILAS
+            filas.forEach(function (fila) {
+                fila.style.display = "none";
+                fila.hidden = true;
+            });
+
+            // MOSTRAR SOLO LAS FILAS DE LA PAGINA ACTUAL
+            filtradas.slice(inicio, fin).forEach(function (fila) {
+                fila.hidden = false;
+                fila.style.display = "";
+            });
+
+            // ACTUALIZAR CONTADOR
+            const hayFiltros =
+                categoria.value !== "" ||
+                estado.value !== "" ||
+                busqueda.value.trim() !== "";
+
+            if (hayFiltros) {
+
+                contador.textContent =
+                    total + " de " + filas.length +
+                    " servicios encontrados";
+
+            } else {
+
+                contador.textContent =
+                    filas.length + " servicios registrados";
+            }
+
+            // INFORMACION DE RESULTADOS
+            if (total === 0) {
+
+                informacion.textContent =
+                    "Mostrando 0 servicios";
+
+            } else {
+
+                informacion.textContent =
+                    "Mostrando " +
+                    (inicio + 1) + " a " +
+                    Math.min(fin, total) +
+                    " de " + total + " servicios";
+            }
+
+            // MOSTRAR MENSAJE CUANDO NO HAY COINCIDENCIAS
+            sinResultados.style.display =
+                total === 0 ? "block" : "none";
+
+            // DIBUJAR PAGINACION
+            paginacion.innerHTML = "";
+
+            if (totalPaginas <= 1) {
+                return;
+            }
+
+            paginacion.appendChild(
+                crearBoton(
+                    "Anterior",
+                    paginaActual - 1,
+                    paginaActual === 1,
+                    false
+                )
+            );
+
+            for (let numero = 1;
+                 numero <= totalPaginas;
+                 numero++) {
+
+                paginacion.appendChild(
+                    crearBoton(
+                        String(numero),
+                        numero,
+                        false,
+                        numero === paginaActual
+                    )
+                );
+            }
+
+            paginacion.appendChild(
+                crearBoton(
+                    "Siguiente",
+                    paginaActual + 1,
+                    paginaActual === totalPaginas,
+                    false
+                )
+            );
+        }
+
+        // CAMBIO DE CATEGORIA
+        categoria.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // CAMBIO DE ESTADO
+        estado.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // BUSCAR MIENTRAS ESCRIBE
+        busqueda.addEventListener("input", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // CAMBIO DE CANTIDAD POR PAGINA
+        cantidadPagina.addEventListener("change", function () {
+            paginaActual = 1;
+            aplicarFiltros();
+        });
+
+        // LIMPIAR TODOS LOS FILTROS
+        botonLimpiar.addEventListener("click", function () {
+
+            categoria.value = "";
+            estado.value = "";
+            busqueda.value = "";
+
+            cantidadPagina.value = "10";
+
+            paginaActual = 1;
+
+            aplicarFiltros();
+
+            busqueda.focus();
+        });
+
+        // CONFIRMAR ACTIVACION O DESACTIVACION
+        document.querySelectorAll(".formEstado")
+            .forEach(function (formulario) {
+
+                formulario.addEventListener("submit", function (evento) {
+
+                    const estadoActual =
+                        formulario.querySelector(
+                            ".estadoActual"
+                        )?.value;
+
+                    const accion =
+                        estadoActual === "Activo" ?
+                        "desactivar" : "activar";
+
+                    const confirmado = window.confirm(
+                        "¿Desea " + accion +
+                        " este servicio?"
+                    );
+
+                    if (!confirmado) {
+                        evento.preventDefault();
                     }
                 });
             });
-        });
 
-    // DATATABLES
-    if (typeof DataTable === "undefined") {
-        console.error("DataTables no está disponible.");
-        return;
+        // INICIALIZAR
+        aplicarFiltros();
+
+        console.log(
+            "VetControl: filtros de servicios inicializados."
+        );
     }
 
-    const tabla = new DataTable("#tablaServicios", {
-        pageLength: 10,
-        lengthMenu: [5, 10, 25, 50],
-        order: [Array.of(0, "desc")],
+    if (document.readyState === "loading") {
 
-        layout: {
-            topStart: "pageLength",
-            topEnd: null,
-            bottomStart: "info",
-            bottomEnd: "paging"
-        },
-
-        language: {
-            lengthMenu: "Mostrar _MENU_ registros",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ servicios",
-            infoEmpty: "Sin servicios",
-            infoFiltered: "(filtrados de _MAX_ servicios)",
-            zeroRecords: "No se encontraron servicios",
-            emptyTable: "No hay servicios registrados",
-            paginate: {
-                first: "Primero",
-                last: "Último",
-                next: "Siguiente",
-                previous: "Anterior"
-            }
-        },
-
-        columnDefs: [{
-            targets: 7,
-            orderable: false,
-            searchable: false
-        }]
-    });
-
-    const filtroCategoria =
-        document.getElementById("filtroCategoria");
-
-    const filtroEstado =
-        document.getElementById("filtroEstado");
-
-    const busqueda =
-        document.getElementById("busquedaGeneral");
-
-    const btnLimpiar =
-        document.getElementById("btnLimpiar");
-
-    function aplicarFiltros() {
-
-        tabla.column(2).search(
-            filtroCategoria.value,
-            { exact: true }
+        document.addEventListener(
+            "DOMContentLoaded",
+            iniciarServicios
         );
 
-        tabla.column(6).search(
-            filtroEstado.value,
-            { exact: true }
-        );
+    } else {
 
-        tabla.search(busqueda.value.trim());
-        tabla.draw();
+        iniciarServicios();
     }
 
-    filtroCategoria.addEventListener("change", aplicarFiltros);
-    filtroEstado.addEventListener("change", aplicarFiltros);
-    busqueda.addEventListener("input", aplicarFiltros);
-
-    btnLimpiar.addEventListener("click", function () {
-
-        filtroCategoria.value = "";
-        filtroEstado.value = "";
-        busqueda.value = "";
-
-        tabla.search("");
-        tabla.columns().search("");
-        tabla.draw();
-    });
-});
+})();
 </script>
+
 </body>
 </html>
