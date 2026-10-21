@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+          content="width=device-width, initial-scale=1">
     <title>Dashboard | VetControl Perú</title>
 
     <style>
@@ -62,11 +61,6 @@
         .enlace:hover,
         .enlace.actual {
             background: #ffffff27;
-        }
-
-        .deshabilitado {
-            opacity: 0.65;
-            cursor: not-allowed;
         }
 
         .salir {
@@ -194,16 +188,6 @@
             color: white;
         }
 
-        .pendiente {
-            display: block;
-            background: #e6ecf1;
-            color: #627789;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 18px;
-        }
-
         .informacion {
             margin-top: 28px;
             padding: 25px;
@@ -253,7 +237,7 @@
 
 <div class="aplicacion">
 
-    <!-- MENÚ LATERAL -->
+    <!-- MENU LATERAL -->
     <aside class="menu">
 
         <div class="marca">
@@ -284,46 +268,43 @@
                 📅 Citas
             </a>
 
-            <!-- SERVICIOS ACTIVADO -->
             <a th:href="@{/servicios}"
                class="enlace">
                 🩺 Servicios
             </a>
-			<!-- PRODUCTOS E INVENTARIO -->
-			<a th:href="@{/productos}"
-			   class="enlace">
-			    📦 Productos
-			</a>
 
-			<a th:href="@{/inventario}"
-			   class="enlace">
-			    🔄 Movimientos
-			</a>
-            <!-- USUARIOS PENDIENTE -->
-            <span th:if="${esAdmin}"
-                  class="enlace deshabilitado">
-                🔐 Usuarios (próximamente)
-            </span>
+            <a th:href="@{/productos}"
+               class="enlace">
+                📦 Productos
+            </a>
 
-            <!-- CERRAR SESIÓN -->
+            <a th:href="@{/inventario}"
+               class="enlace">
+                🔄 Movimientos
+            </a>
+
+            <!-- SOLO EL ADMIN VE USUARIOS -->
+            <a th:if="${esAdmin}"
+               th:href="@{/usuarios}"
+               class="enlace">
+                🔐 Administración de Usuarios
+            </a>
+
             <form th:action="@{/logout}"
                   method="post">
 
                 <button type="submit" class="salir">
                     Cerrar sesión
                 </button>
-
             </form>
 
         </nav>
-
     </aside>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- PANEL PRINCIPAL -->
     <div class="principal">
 
         <header class="cabecera">
-
             <h1>Panel de control</h1>
 
             <div>
@@ -336,12 +317,10 @@
                     Rol
                 </span>
             </div>
-
         </header>
 
         <main class="contenido">
 
-            <!-- BIENVENIDA -->
             <section class="bienvenida">
 
                 <h2>Bienvenido a VetControl Perú</h2>
@@ -355,7 +334,6 @@
                     Consulta las estadísticas generales
                     y administra los módulos veterinarios.
                 </p>
-
             </section>
 
             <h2>Resumen general</h2>
@@ -366,7 +344,6 @@
                 <article class="tarjeta">
 
                     <div class="simbolo">👥</div>
-
                     <h3>Clientes</h3>
 
                     <div class="numero"
@@ -374,22 +351,18 @@
                         0
                     </div>
 
-                    <p>
-                        Total de clientes registrados.
-                    </p>
+                    <p>Total de clientes registrados.</p>
 
                     <a class="boton"
                        th:href="@{/clientes}">
                         Ver clientes
                     </a>
-
                 </article>
 
                 <!-- MASCOTAS -->
                 <article class="tarjeta">
 
                     <div class="simbolo">🐾</div>
-
                     <h3>Mascotas</h3>
 
                     <div class="numero"
@@ -397,22 +370,18 @@
                         0
                     </div>
 
-                    <p>
-                        Total de mascotas registradas.
-                    </p>
+                    <p>Total de mascotas registradas.</p>
 
                     <a class="boton"
                        th:href="@{/mascotas}">
                         Ver mascotas
                     </a>
-
                 </article>
 
                 <!-- CITAS -->
                 <article class="tarjeta">
 
                     <div class="simbolo">📅</div>
-
                     <h3>Citas</h3>
 
                     <div class="numero"
@@ -420,22 +389,18 @@
                         0
                     </div>
 
-                    <p>
-                        Total histórico de citas.
-                    </p>
+                    <p>Total histórico de citas.</p>
 
                     <a class="boton"
                        th:href="@{/citas}">
                         Ver citas
                     </a>
-
                 </article>
 
                 <!-- SERVICIOS -->
                 <article class="tarjeta">
 
                     <div class="simbolo">🩺</div>
-
                     <h3>Servicios</h3>
 
                     <div class="numero"
@@ -448,17 +413,14 @@
                         en el catálogo MySQL.
                     </p>
 
-                    <!-- BOTÓN FUNCIONAL -->
                     <a class="boton"
                        th:href="@{/servicios}">
                         Ver servicios
                     </a>
-
                 </article>
 
             </section>
 
-            <!-- INFORMACIÓN DE SESIÓN -->
             <section class="informacion">
 
                 <h3>Información de la sesión</h3>
@@ -485,12 +447,14 @@
                     Sesión con permisos operativos.
                 </p>
 
+                <p th:if="${esAdmin}">
+                    <a th:href="@{/usuarios}">
+                        Administrar usuarios del sistema
+                    </a>
+                </p>
             </section>
-
         </main>
-
     </div>
-
 </div>
 
 </body>
