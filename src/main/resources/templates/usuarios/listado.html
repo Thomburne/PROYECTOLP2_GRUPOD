@@ -1,45 +1,50 @@
 
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
-    <title>Administrar Usuarios - VetControl Perú</title>
+
+    <title>Administración de Usuarios | VetControl Perú</title>
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
     <style>
         body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #eff6f9;
+            margin: 0;
+            background: #edf5f8;
             color: #173b59;
+            font-family: "Segoe UI", Arial, sans-serif;
         }
 
-        header {
-            background: linear-gradient(110deg, #103c63, #169c9c);
-            padding: 26px;
+        .cabecera {
+            background: linear-gradient(
+                110deg, #123e63, #168f98
+            );
             color: white;
+            padding: 25px 30px;
         }
 
         .contenedor {
-            max-width: 1250px;
-            margin: 30px auto;
-            padding: 0 18px;
+            max-width: 1450px;
+            padding: 25px;
+            margin: auto;
         }
 
         .tarjeta {
             background: white;
-            border-radius: 16px;
-            border: 1px solid #dce7ed;
             padding: 25px;
+            border: 1px solid #dae8ee;
+            border-radius: 17px;
             margin-bottom: 25px;
         }
 
-        h2 {
+        .titulo {
             font-weight: 700;
-            color: #123e62;
+            color: #123e63;
         }
 
         .form-label {
@@ -51,45 +56,63 @@
             --bs-table-color: white;
             background: #16486b !important;
             color: white !important;
-            padding: 12px;
+            white-space: nowrap;
+            padding: 13px;
         }
 
-        #tablaUsuarios td {
+        #tablaUsuarios tbody td {
             vertical-align: middle;
         }
 
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-width: 290px;
+        }
+
+        .acciones form {
+            margin: 0;
+        }
+
         .contador {
-            background: #d9f7e8;
-            color: #087447;
             padding: 9px 16px;
-            border-radius: 25px;
-            font-weight: 600;
+            border-radius: 22px;
+            background: #d9f7e8;
+            color: #087347;
+            font-weight: 700;
         }
     </style>
 </head>
 
 <body>
 
-<header>
+<header class="cabecera">
     <div class="d-flex justify-content-between
                 align-items-center flex-wrap gap-3">
+
         <div>
             <h1 class="h3 mb-1">
                 Administración de Usuarios
             </h1>
+
             <p class="mb-0">
-                VetControl Perú - Gestión de accesos
+                VetControl Perú - Gestión del personal
+                y permisos de acceso
             </p>
         </div>
 
-        <a th:href="@{/dashboard}" class="btn btn-light">
+        <a th:href="@{/dashboard}"
+           class="btn btn-light">
             Volver al Dashboard
         </a>
+
     </div>
 </header>
 
 <main class="contenedor">
 
+    <!-- MENSAJES -->
     <div th:if="${mensaje}"
          th:text="${mensaje}"
          class="alert alert-success">
@@ -100,11 +123,13 @@
          class="alert alert-danger">
     </div>
 
+    <!-- CREAR USUARIO -->
     <section class="tarjeta">
 
-        <h2 class="h4 mb-3">Registrar nuevo usuario</h2>
+        <h2 class="titulo h4 mb-3">
+            Registrar nuevo usuario
+        </h2>
 
-        <!-- FORMULARIO CON TOKEN CSRF -->
         <form th:action="@{/usuarios/guardar}"
               th:object="${formulario}"
               method="post">
@@ -117,86 +142,86 @@
             <div class="row g-3">
 
                 <div class="col-md-6">
-                    <label for="nombres" class="form-label">
+                    <label for="nombres"
+                           class="form-label">
                         Nombre completo
                     </label>
+
                     <input id="nombres"
                            type="text"
                            th:field="*{nombres}"
-                           class="form-control"
                            maxlength="120"
+                           class="form-control"
                            required>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="username" class="form-label">
+                    <label for="username"
+                           class="form-label">
                         Usuario
                     </label>
+
                     <input id="username"
                            type="text"
                            th:field="*{username}"
-                           class="form-control"
                            minlength="4"
                            maxlength="50"
                            pattern="[A-Za-z0-9._-]{4,50}"
-                           autocomplete="off"
+                           class="form-control"
                            required>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="correo" class="form-label">
+                    <label for="correo"
+                           class="form-label">
                         Correo electrónico
                     </label>
+
                     <input id="correo"
                            type="email"
                            th:field="*{correo}"
-                           class="form-control"
                            maxlength="150"
+                           class="form-control"
                            required>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="rol" class="form-label">
-                        Rol
+                    <label for="rol"
+                           class="form-label">
+                        Rol del usuario
                     </label>
+
                     <select id="rol"
                             th:field="*{rol}"
-                            class="form-select"
-                            required>
+                            class="form-select">
                         <option value="EMPLEADO">EMPLEADO</option>
                         <option value="ADMIN">ADMINISTRADOR</option>
                     </select>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="password" class="form-label">
+
+                    <label for="password"
+                           class="form-label">
                         Contraseña inicial
                     </label>
 
-                    <div class="input-group">
-                        <input id="password"
-                               name="password"
-                               type="password"
-                               minlength="10"
-                               maxlength="72"
-                               autocomplete="new-password"
-                               class="form-control"
-                               required>
+                    <input id="password"
+                           type="password"
+                           name="password"
+                           minlength="10"
+                           maxlength="72"
+                           autocomplete="new-password"
+                           class="form-control"
+                           required>
 
-                        <button id="mostrarClave"
-                                type="button"
-                                class="btn btn-outline-secondary">
-                            Mostrar
-                        </button>
+                    <div class="form-text">
+                        Mínimo 10 caracteres. Se cifra con BCrypt.
                     </div>
-
-                    <small class="text-secondary">
-                        Mínimo 10 caracteres.
-                        Se almacenará cifrada con BCrypt.
-                    </small>
                 </div>
 
                 <div class="col-12">
+
                     <button type="submit"
                             class="btn btn-success">
                         Registrar usuario
@@ -206,18 +231,22 @@
                             class="btn btn-outline-secondary">
                         Limpiar formulario
                     </button>
+
                 </div>
 
             </div>
         </form>
     </section>
 
+    <!-- LISTADO -->
     <section class="tarjeta">
 
         <div class="d-flex justify-content-between
                     align-items-center flex-wrap gap-3 mb-4">
 
-            <h2 class="h4 mb-0">Usuarios registrados</h2>
+            <h2 class="titulo h4 mb-0">
+                Usuarios registrados
+            </h2>
 
             <span class="contador"
                   th:text="${totalUsuarios + ' usuarios'}">
@@ -225,98 +254,294 @@
             </span>
         </div>
 
-        <div class="row g-3 mb-3">
+        <!-- FILTROS -->
+        <div class="row g-3 mb-4">
 
             <div class="col-md-6">
+
+                <label for="buscar"
+                       class="form-label">
+                    Buscar usuario
+                </label>
+
                 <input id="buscar"
                        type="search"
                        class="form-control"
-                       placeholder="Buscar nombre, usuario o correo">
+                       placeholder="Nombre, usuario o correo">
             </div>
 
             <div class="col-md-3">
-                <select id="filtroRol" class="form-select">
-                    <option value="">Todos los roles</option>
+
+                <label for="filtroRol"
+                       class="form-label">
+                    Rol
+                </label>
+
+                <select id="filtroRol"
+                        class="form-select">
+
+                    <option value="">Todos</option>
                     <option value="ADMIN">ADMIN</option>
                     <option value="EMPLEADO">EMPLEADO</option>
                 </select>
             </div>
 
-            <div class="col-md-3">
-                <button id="limpiar"
-                        type="button"
+            <div class="col-md-3 d-flex align-items-end">
+
+                <button type="button"
+                        id="btnLimpiar"
                         class="btn btn-outline-secondary w-100">
                     Limpiar filtros
                 </button>
             </div>
+
         </div>
 
         <div class="table-responsive">
+
             <table id="tablaUsuarios"
-                   class="table table-bordered table-striped">
+                   class="table table-bordered
+                          table-striped table-hover">
+
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nombre</th>
+                        <th>Nombre completo</th>
                         <th>Usuario</th>
                         <th>Correo</th>
                         <th>Rol</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
+
                     <tr th:each="usuario : ${usuarios}"
                         th:attr="data-rol=${usuario.rol}">
 
-                        <td th:text="${usuario.idUsuario}"></td>
+                        <td th:text="${usuario.idUsuario}">
+                            1
+                        </td>
 
-                        <td th:text="${usuario.nombres}"></td>
+                        <td th:text="${usuario.nombres}">
+                            Nombre
+                        </td>
 
-                        <td th:text="${usuario.username}"></td>
+                        <td th:text="${usuario.username}">
+                            usuario01
+                        </td>
 
-                        <td th:text="${usuario.correo}"></td>
+                        <td th:text="${usuario.correo}">
+                            correo@ejemplo.com
+                        </td>
 
                         <td>
                             <span class="badge"
-                                  th:classappend="${usuario.rol == 'ADMIN'} ? 'text-bg-primary' : 'text-bg-secondary'"
+                                  th:classappend="${usuario.rol == 'ADMIN' ? 'text-bg-primary' : 'text-bg-secondary'}"
                                   th:text="${usuario.rol}">
+                                ADMIN
                             </span>
                         </td>
 
                         <td>
                             <span class="badge"
-                                  th:classappend="${usuario.activo == true} ? 'text-bg-success' : 'text-bg-danger'"
+                                  th:classappend="${usuario.activo == true ? 'text-bg-success' : 'text-bg-danger'}"
                                   th:text="${usuario.activo == true ? 'Activo' : 'Inactivo'}">
+                                Activo
                             </span>
+                        </td>
+
+                        <td>
+
+                            <div class="acciones">
+
+                                <!-- EDITAR -->
+                                <a th:href="@{/usuarios/{id}/editar(id=${usuario.idUsuario})}"
+                                   class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
+
+                                <!-- ACTIVAR / DESACTIVAR -->
+                                <form th:action="@{/usuarios/{id}/cambiar-estado(id=${usuario.idUsuario})}"
+                                      method="post"
+                                      onsubmit="return confirm('¿Confirmar cambio de estado?');">
+
+                                    <input type="hidden"
+                                           th:if="${_csrf != null}"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}">
+
+                                    <button type="submit"
+                                            class="btn btn-sm"
+                                            th:classappend="${usuario.activo == true ? 'btn-outline-danger' : 'btn-outline-success'}"
+                                            th:text="${usuario.activo == true ? 'Desactivar' : 'Activar'}">
+                                        Desactivar
+                                    </button>
+                                </form>
+
+                                <!-- RESETEAR CONTRASEÑA -->
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-sm"
+                                        data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#modalClave' + ${usuario.idUsuario}">
+                                    Restablecer clave
+                                </button>
+
+                                <!-- ELIMINAR -->
+                                <form th:action="@{/usuarios/{id}/eliminar(id=${usuario.idUsuario})}"
+                                      method="post"
+                                      onsubmit="return confirm('¿ELIMINAR definitivamente este usuario? Esta acción no se puede deshacer.');">
+
+                                    <input type="hidden"
+                                           th:if="${_csrf != null}"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}">
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm">
+                                        Eliminar
+                                    </button>
+                                </form>
+
+                            </div>
+
                         </td>
                     </tr>
+
                 </tbody>
             </table>
+
         </div>
 
-        <p id="sinResultados"
-           class="alert alert-info"
-           style="display:none">
-            No se encontraron usuarios.
-        </p>
+        <div id="sinResultados"
+             class="alert alert-info mt-3"
+             style="display:none">
 
-        <p id="resultados"
-           class="text-secondary small"></p>
+            No se encontraron usuarios.
+        </div>
+
+        <p id="informacionResultados"
+           class="text-secondary small mt-3"></p>
+
     </section>
+
+    <!-- MODALES DE CONTRASEÑA: FUERA DE LA TABLA -->
+    <div th:each="usuario : ${usuarios}">
+
+        <div class="modal fade"
+             th:id="${'modalClave' + usuario.idUsuario}"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <form th:action="@{/usuarios/{id}/restablecer-clave(id=${usuario.idUsuario})}"
+                          method="post">
+
+                        <input type="hidden"
+                               th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+
+                        <div class="modal-header">
+
+                            <h5 class="modal-title">
+                                Restablecer contraseña
+                            </h5>
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal">
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <p>
+                                Cuenta:
+                                <strong th:text="${usuario.username}">
+                                    usuario
+                                </strong>
+                            </p>
+
+                            <label class="form-label"
+                                   th:for="${'nuevaClave' + usuario.idUsuario}">
+                                Nueva contraseña
+                            </label>
+
+                            <input type="password"
+                                   name="nuevaClave"
+                                   th:id="${'nuevaClave' + usuario.idUsuario}"
+                                   class="form-control mb-3"
+                                   minlength="10"
+                                   maxlength="72"
+                                   autocomplete="new-password"
+                                   required>
+
+                            <label class="form-label"
+                                   th:for="${'confirmarClave' + usuario.idUsuario}">
+                                Confirmar nueva contraseña
+                            </label>
+
+                            <input type="password"
+                                   name="confirmarClave"
+                                   th:id="${'confirmarClave' + usuario.idUsuario}"
+                                   class="form-control"
+                                   minlength="10"
+                                   maxlength="72"
+                                   autocomplete="new-password"
+                                   required>
+
+                            <p class="text-secondary small mt-3 mb-0">
+                                La contraseña anterior será reemplazada
+                                por un nuevo hash BCrypt.
+                            </p>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Guardar nueva contraseña
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
     const buscar = document.getElementById("buscar");
     const rol = document.getElementById("filtroRol");
-    const limpiar = document.getElementById("limpiar");
+    const limpiar = document.getElementById("btnLimpiar");
+
     const filas = Array.from(
-        document.querySelectorAll("#tablaUsuarios tbody tr")
+        document.querySelectorAll(
+            "#tablaUsuarios tbody tr"
+        )
     );
 
     function normalizar(valor) {
+
         return String(valor || "")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
@@ -325,49 +550,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function filtrar() {
+
         let visibles = 0;
 
         filas.forEach(function (fila) {
-            const texto = normalizar(fila.textContent);
-            const rolFila = normalizar(fila.dataset.rol);
+
+            const texto = normalizar(
+                fila.cells[1].textContent + " " +
+                fila.cells[2].textContent + " " +
+                fila.cells[3].textContent
+            );
+
+            const rolFila =
+                normalizar(fila.dataset.rol);
+
+            const coincideTexto =
+                texto.includes(normalizar(buscar.value));
+
+            const coincideRol =
+                !rol.value ||
+                rolFila === normalizar(rol.value);
 
             const mostrar =
-                texto.includes(normalizar(buscar.value)) &&
-                (!rol.value ||
-                 rolFila === normalizar(rol.value));
+                coincideTexto && coincideRol;
 
-            fila.style.display = mostrar ? "" : "none";
+            fila.style.display =
+                mostrar ? "" : "none";
 
-            if (mostrar) visibles++;
+            if (mostrar) {
+                visibles++;
+            }
         });
 
-        document.getElementById("sinResultados")
-            .style.display = visibles === 0 ? "block" : "none";
+        document.getElementById(
+            "sinResultados"
+        ).style.display =
+            visibles === 0 ? "block" : "none";
 
-        document.getElementById("resultados")
-            .textContent =
-                "Mostrando " + visibles + " de " +
-                filas.length + " usuarios";
+        document.getElementById(
+            "informacionResultados"
+        ).textContent =
+            "Mostrando " + visibles +
+            " de " + filas.length + " usuarios";
     }
 
     buscar.addEventListener("input", filtrar);
     rol.addEventListener("change", filtrar);
 
     limpiar.addEventListener("click", function () {
+
         buscar.value = "";
         rol.value = "";
+
         filtrar();
     });
-
-    document.getElementById("mostrarClave")
-        .addEventListener("click", function () {
-            const campo = document.getElementById("password");
-            campo.type =
-                campo.type === "password" ? "text" : "password";
-        });
 
     filtrar();
 });
 </script>
+
 </body>
 </html>
