@@ -1,0 +1,48 @@
+
+name: Validar VetControl Peru
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  compilar-proyecto:
+    name: Compilar Spring Boot
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Descargar codigo del proyecto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Verificar Java y Maven
+        run: |
+          java -version
+          mvn -version
+
+      - name: Compilar VetControl Peru
+        run: mvn -B -ntp clean package -DskipTests
+
+      - name: Guardar archivo JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: VetControlPeru-JAR
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 7

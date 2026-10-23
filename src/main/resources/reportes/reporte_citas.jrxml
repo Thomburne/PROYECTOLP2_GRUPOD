@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_citas" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e8feae6a-be28-4452-9f57-2fd7d43df4bd">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Titulo" forecolor="#174A78" fontName="SansSerif" fontSize="22" isBold="true"/>
+	<style name="Subtitulo" forecolor="#078B92" fontName="SansSerif" fontSize="13" isBold="true"/>
+	<style name="Cabecera" mode="Opaque" forecolor="#FFFFFF" backcolor="#174A78" fontName="SansSerif" fontSize="9" isBold="true"/>
+	<style name="Detalle" forecolor="#243746" fontName="SansSerif" fontSize="8"/>
+	<style name="DetalleAlterno" style="Detalle">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EFF5F8"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+                CAST(c.id_cita AS CHAR) AS cita_id,
+                DATE_FORMAT(
+                    c.fecha_hora,
+                    '%d/%m/%Y %H:%i'
+                ) AS fecha,
+                CAST(c.id_mascota AS CHAR) AS mascota_id,
+                CAST(c.id_servicio AS CHAR) AS servicio_id,
+                COALESCE(c.estado, '') AS estado,
+                COALESCE(c.motivo, '') AS motivo,
+                COALESCE(c.observaciones, '') AS observaciones
+            FROM tbl_cita c
+            ORDER BY c.fecha_hora DESC, c.id_cita DESC]]>
+	</queryString>
+	<field name="cita_id" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="mascota_id" class="java.lang.String"/>
+	<field name="servicio_id" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="motivo" class="java.lang.String"/>
+	<field name="observaciones" class="java.lang.String"/>
+	<variable name="TOTAL_CITAS" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{cita_id}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="112" splitType="Stretch">
+			<staticText>
+				<reportElement style="Titulo" x="0" y="0" width="802" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd101"/>
+				<text><![CDATA[VETCONTROL PERÚ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="39" width="802" height="26" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd102"/>
+				<text><![CDATA[REPORTE GENERAL DE CITAS VETERINARIAS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="71" width="400" height="20" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd103"/>
+				<textElement>
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de emisión: " +
+                    new java.text.SimpleDateFormat(
+                        "dd/MM/yyyy HH:mm"
+                    ).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="560" y="71" width="242" height="20" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd104"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total de citas: " + $V{TOTAL_CITAS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="99" width="802" height="1" forecolor="#078B92" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd122"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="31">
+			<staticText>
+				<reportElement style="Cabecera" x="0" y="0" width="45" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd105"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="45" y="0" width="133" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd106"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ FECHA Y HORA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="178" y="0" width="75" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd107"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ MASCOTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="253" y="0" width="75" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd108"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="328" y="0" width="94" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd109"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="422" y="0" width="180" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd110"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ MOTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="602" y="0" width="200" height="29" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd111"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ OBSERVACIONES]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement style="DetalleAlterno" x="0" y="2" width="45" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd112"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cita_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="DetalleAlterno" x="45" y="2" width="133" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd113"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="DetalleAlterno" x="178" y="2" width="75" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd114"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{mascota_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="DetalleAlterno" x="253" y="2" width="75" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd115"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{servicio_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="DetalleAlterno" x="328" y="2" width="94" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd116"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement style="DetalleAlterno" x="422" y="2" width="180" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd117"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement style="DetalleAlterno" x="602" y="2" width="200" height="35" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd118"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35">
+			<line>
+				<reportElement x="0" y="0" width="802" height="1" forecolor="#D0DDE5" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd123"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="7" width="570" height="20" forecolor="#174A78" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd119"/>
+				<textElement>
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<text><![CDATA[VetControl Perú | Grupo D | Cibertec]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="670" y="7" width="132" height="20" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd120"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="120">
+			<staticText>
+				<reportElement x="0" y="25" width="802" height="30" forecolor="#174A78" uuid="3be6a09a-f55b-43c3-8f18-c1a4aa1cd121"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No se encontraron citas veterinarias.]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

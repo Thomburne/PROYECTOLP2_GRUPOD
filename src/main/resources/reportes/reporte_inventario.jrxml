@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_inventario" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29f8d2b4-0c7a-4e60-9815-f29e02a71348">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Titulo" forecolor="#174A78" fontName="SansSerif" fontSize="22" isBold="true"/>
+	<style name="Subtitulo" forecolor="#078B92" fontName="SansSerif" fontSize="13" isBold="true"/>
+	<style name="Cabecera" mode="Opaque" forecolor="#FFFFFF" backcolor="#174A78" fontName="SansSerif" fontSize="8" isBold="true"/>
+	<style name="Detalle" forecolor="#243746" fontName="SansSerif" fontSize="8"/>
+	<style name="FilaAlterna" style="Detalle">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EFF5F8"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+                p.codigo AS codigo,
+                p.nombre AS nombre,
+                p.categoria AS categoria,
+                p.unidad_medida AS unidad,
+                CAST(p.stock_actual AS CHAR) AS stock,
+                CAST(p.stock_minimo AS CHAR) AS minimo,
+                CAST(p.precio_venta AS CHAR) AS precio,
+                CASE
+                    WHEN p.activo = 1 THEN 'ACTIVO'
+                    ELSE 'INACTIVO'
+                END AS estado,
+                CASE
+                    WHEN p.stock_actual <= p.stock_minimo
+                    THEN 'STOCK BAJO'
+                    ELSE 'NORMAL'
+                END AS alerta
+            FROM tbl_producto p
+            ORDER BY p.nombre ASC, p.codigo ASC]]>
+	</queryString>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="unidad" class="java.lang.String"/>
+	<field name="stock" class="java.lang.String"/>
+	<field name="minimo" class="java.lang.String"/>
+	<field name="precio" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="alerta" class="java.lang.String"/>
+	<variable name="TOTAL_PRODUCTOS" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{codigo}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="110">
+			<staticText>
+				<reportElement style="Titulo" x="0" y="0" width="802" height="36" uuid="b81e13ad-f0d8-40dc-a019-c452fa310001"/>
+				<text><![CDATA[VETCONTROL PERÚ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="39" width="802" height="26" uuid="b81e13ad-f0d8-40dc-a019-c452fa310002"/>
+				<text><![CDATA[REPORTE GENERAL DE PRODUCTOS E INVENTARIO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="73" width="395" height="20" uuid="b81e13ad-f0d8-40dc-a019-c452fa310003"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de emisión: " +
+                    new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
+                    .format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="565" y="73" width="237" height="20" uuid="b81e13ad-f0d8-40dc-a019-c452fa310004"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total de productos: " + $V{TOTAL_PRODUCTOS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="101" width="802" height="1" forecolor="#078B92" uuid="b81e13ad-f0d8-40dc-a019-c452fa310005"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement style="Cabecera" x="0" y="0" width="92" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310006"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ CÓDIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="92" y="0" width="150" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310007"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ PRODUCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="242" y="0" width="102" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310008"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ CATEGORÍA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="344" y="0" width="77" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310009"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ UNIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="421" y="0" width="66" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310010"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ STOCK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="487" y="0" width="66" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310011"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ MÍNIMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="553" y="0" width="80" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310012"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ PRECIO S/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="633" y="0" width="80" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310013"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="713" y="0" width="89" height="28" uuid="b81e13ad-f0d8-40dc-a019-c452fa310014"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ ALERTA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement style="FilaAlterna" x="0" y="3" width="92" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310015"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement style="FilaAlterna" x="92" y="3" width="150" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310016"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="242" y="3" width="102" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310017"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="344" y="3" width="77" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310018"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="421" y="3" width="66" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310019"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="487" y="3" width="66" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310020"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{minimo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="553" y="3" width="80" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310021"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="633" y="3" width="80" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310022"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="713" y="3" width="89" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310023"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{alerta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<line>
+				<reportElement x="0" y="0" width="802" height="1" forecolor="#D0DDE5" uuid="b81e13ad-f0d8-40dc-a019-c452fa310024"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="7" width="565" height="19" forecolor="#174A78" uuid="b81e13ad-f0d8-40dc-a019-c452fa310025"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[VetControl Perú | Grupo D | Cibertec]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="680" y="7" width="122" height="19" uuid="b81e13ad-f0d8-40dc-a019-c452fa310026"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="90">
+			<staticText>
+				<reportElement x="0" y="25" width="802" height="30" uuid="b81e13ad-f0d8-40dc-a019-c452fa310027"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No se encontraron productos registrados.]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

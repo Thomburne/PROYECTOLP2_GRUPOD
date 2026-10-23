@@ -60,6 +60,13 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+<!-- REPORTES PDF CON JASPERREPORTS -->
+<dependency>
+    <groupId>net.sf.jasperreports</groupId>
+    <artifactId>jasperreports</artifactId>
+    <version>6.21.5</version>
+</dependency>
+
         <!-- MYSQL -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -100,6 +107,8 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+            
+            
         </dependency>
 
     </dependencies>
