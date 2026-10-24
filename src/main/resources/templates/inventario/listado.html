@@ -256,11 +256,21 @@
                         </p>
                     </div>
 
-                    <a th:href="@{/inventario/nuevo}"
-                       class="btn btn-primary">
-                        <i class="fa-solid fa-plus"></i>
-                        Nuevo Movimiento
-                    </a>
+					<div class="d-flex flex-wrap gap-2">
+
+					    <a th:href="@{/reportes/movimientos}"
+					       class="btn btn-outline-danger">
+					        <i class="fa-solid fa-file-pdf"></i>
+					        Reporte PDF
+					    </a>
+
+					    <a th:href="@{/inventario/nuevo}"
+					       class="btn btn-primary">
+					        <i class="fa-solid fa-plus"></i>
+					        Nuevo Movimiento
+					    </a>
+
+					</div>
 
                 </div>
 

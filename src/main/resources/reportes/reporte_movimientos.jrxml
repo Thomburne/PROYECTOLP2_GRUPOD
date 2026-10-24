@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_movimientos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<style name="Titulo" forecolor="#174A78" fontName="SansSerif" fontSize="22" isBold="true"/>
+	<style name="Subtitulo" forecolor="#078B92" fontName="SansSerif" fontSize="13" isBold="true"/>
+	<style name="Cabecera" mode="Opaque" forecolor="#FFFFFF" backcolor="#174A78" fontName="SansSerif" fontSize="8" isBold="true"/>
+	<style name="Detalle" forecolor="#243746" fontName="SansSerif" fontSize="8"/>
+	<style name="FilaAlterna" style="Detalle">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EFF5F8"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="P_ID_PRODUCTO" class="java.lang.String"/>
+	<parameter name="P_TIPO" class="java.lang.String"/>
+	<parameter name="P_DESDE" class="java.lang.String"/>
+	<parameter name="P_HASTA" class="java.lang.String"/>
+	<parameter name="P_FILTROS" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+                DATE_FORMAT(m.fecha_movimiento, '%d/%m/%Y %H:%i') AS fecha,
+                p.codigo AS codigo,
+                p.nombre AS producto,
+                m.tipo AS tipo,
+                CASE WHEN m.tipo = 'ENTRADA' THEN m.cantidad ELSE 0 END AS entrada,
+                CASE WHEN m.tipo = 'ENTRADA' THEN 0 ELSE m.cantidad END AS salida,
+                COALESCE(m.motivo, '') AS motivo
+            FROM tbl_movimiento_inventario m
+            INNER JOIN tbl_producto p ON p.id_producto = m.id_producto
+            WHERE ($P{P_ID_PRODUCTO} = '' OR m.id_producto = $P{P_ID_PRODUCTO})
+              AND ($P{P_TIPO} = '' OR m.tipo = $P{P_TIPO})
+              AND ($P{P_DESDE} = '' OR DATE(m.fecha_movimiento) >= $P{P_DESDE})
+              AND ($P{P_HASTA} = '' OR DATE(m.fecha_movimiento) <= $P{P_HASTA})
+            ORDER BY m.fecha_movimiento ASC, m.id_movimiento ASC]]>
+	</queryString>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="producto" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="entrada" class="java.math.BigDecimal"/>
+	<field name="salida" class="java.math.BigDecimal"/>
+	<field name="motivo" class="java.lang.String"/>
+	<variable name="TOTAL_MOVIMIENTOS" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{codigo}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_ENTRADAS" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{entrada}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_SALIDAS" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{salida}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="125">
+			<staticText>
+				<reportElement style="Titulo" x="0" y="0" width="802" height="36"/>
+				<text><![CDATA[VETCONTROL PERÚ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="39" width="802" height="26"/>
+				<text><![CDATA[REPORTE DE MOVIMIENTOS DE INVENTARIO (KARDEX)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="73" width="395" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de emisión: " +
+                    new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
+                    .format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="565" y="73" width="237" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total de movimientos: " + $V{TOTAL_MOVIMIENTOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="93" width="802" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_FILTROS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="118" width="802" height="1" forecolor="#078B92"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement style="Cabecera" x="0" y="0" width="110" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="110" y="0" width="80" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ CÓDIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="190" y="0" width="190" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ PRODUCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="380" y="0" width="70" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="450" y="0" width="65" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ ENTRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="515" y="0" width="65" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ SALIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cabecera" x="580" y="0" width="222" height="28"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ MOTIVO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement style="FilaAlterna" x="0" y="2" width="110" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="110" y="2" width="80" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement style="FilaAlterna" x="190" y="2" width="190" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="380" y="2" width="70" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="450" y="2" width="65" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{entrada}.signum() == 0 ? "" : "+" + $F{entrada}.toPlainString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="FilaAlterna" x="515" y="2" width="65" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{salida}.signum() == 0 ? "" : "-" + $F{salida}.toPlainString()]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement style="FilaAlterna" x="580" y="2" width="222" height="24"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<line>
+				<reportElement x="0" y="0" width="802" height="1" forecolor="#D0DDE5"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="7" width="565" height="19" forecolor="#174A78"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[VetControl Perú | Grupo D | Cibertec]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="680" y="7" width="122" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="60">
+			<line>
+				<reportElement x="0" y="8" width="802" height="1" forecolor="#078B92"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="16" width="260" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total entradas: +" + $V{TOTAL_ENTRADAS}.toPlainString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="16" width="260" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total salidas y ajustes: -" + $V{TOTAL_SALIDAS}.toPlainString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="540" y="16" width="262" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Variación neta: " + $V{TOTAL_ENTRADAS}.subtract($V{TOTAL_SALIDAS}).toPlainString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+	<noData>
+		<band height="90">
+			<staticText>
+				<reportElement x="0" y="25" width="802" height="30"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No se encontraron movimientos con los filtros indicados.]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>
