@@ -110,7 +110,16 @@ public class SecurityConfig {
                     "/servicios/**",
 
                     "/servicio",
-                    "/servicio/**"
+                    "/servicio/**",
+
+                    "/productos",
+                    "/productos/**",
+
+                    "/inventario",
+                    "/inventario/**",
+
+                    "/reportes",
+                    "/reportes/**"
                 ).hasAnyRole("ADMIN", "EMPLEADO")
 
                 // CUALQUIER OTRA RUTA
