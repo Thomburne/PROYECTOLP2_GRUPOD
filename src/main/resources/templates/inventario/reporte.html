@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reporte de Movimientos | VetControl Perú</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --azul: #143e60;
+            --turquesa: #168e98;
+            --fondo: #edf5f8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #173b59;
+        }
+
+        .aplicacion { display: flex; min-height: 100vh; }
+
+        .menu {
+            width: 255px;
+            flex-shrink: 0;
+            padding: 24px 14px;
+            color: white;
+            background: linear-gradient(180deg, #143e60, #176a78);
+        }
+
+        .marca {
+            text-align: center;
+            padding: 15px 0 28px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #ffffff35;
+        }
+
+        .marca i { font-size: 40px; color: #7ce1d9; }
+
+        .marca h2 { font-size: 25px; font-weight: 700; margin: 12px 0 3px; }
+
+        .marca h2 span { color: #7ce1d9; }
+
+        .marca small { color: #b8ebe8; letter-spacing: 5px; }
+
+        .enlace-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 11px;
+            margin-bottom: 8px;
+        }
+
+        .enlace-menu:hover,
+        .enlace-menu.activo { background: #ffffff28; color: white; }
+
+        .salir {
+            background: #bb3943;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            width: 100%;
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .principal { flex: 1; min-width: 0; }
+
+        .cabecera {
+            background: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px #0000000a;
+        }
+
+        .cabecera h1 { margin: 0; font-size: 25px; font-weight: 700; }
+
+        .contenido { max-width: 1100px; margin: auto; padding: 30px; }
+
+        .tarjeta {
+            background: white;
+            border: 1px solid #e0eaf0;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 6px 22px #123e6310;
+        }
+
+        .titulo { color: var(--azul); font-weight: 700; }
+
+        .seccion {
+            background: #f5f9fb;
+            border: 1px solid #dce9ee;
+            border-radius: 13px;
+            padding: 22px;
+            margin-top: 25px;
+        }
+
+        .seccion h5 { color: var(--azul); font-weight: 700; }
+
+        .form-label { color: #234a68; font-weight: 600; }
+
+        .form-control,
+        .form-select { border-radius: 9px; padding: 11px; }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--turquesa);
+            box-shadow: 0 0 0 .2rem #168e9825;
+        }
+
+        .botones {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-generar {
+            background: #168e98;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 24px;
+        }
+
+        .btn-generar:hover { background: #106f77; color: white; }
+
+        @media (max-width: 900px) {
+            .aplicacion { flex-direction: column; }
+            .menu { width: 100%; }
+            .cabecera { flex-wrap: wrap; padding: 18px; }
+            .contenido { padding: 15px; }
+            .tarjeta { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="aplicacion">
+
+    <!-- MENU -->
+    <aside class="menu">
+
+        <div class="marca">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <h2>Vet<span>Control</span></h2>
+            <small>PERÚ</small>
+        </div>
+
+        <nav aria-label="Menú principal">
+
+            <a th:href="@{/dashboard}" class="enlace-menu">
+                <i class="fa-solid fa-house"></i>
+                Inicio
+            </a>
+
+            <a th:href="@{/clientes}" class="enlace-menu">
+                <i class="fa-solid fa-users"></i>
+                Clientes
+            </a>
+
+            <a th:href="@{/mascotas}" class="enlace-menu">
+                <i class="fa-solid fa-paw"></i>
+                Mascotas
+            </a>
+
+            <a th:href="@{/citas}" class="enlace-menu">
+                <i class="fa-solid fa-calendar-check"></i>
+                Citas
+            </a>
+
+            <a th:href="@{/servicios}" class="enlace-menu">
+                <i class="fa-solid fa-stethoscope"></i>
+                Servicios
+            </a>
+
+            <a th:href="@{/productos}" class="enlace-menu">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                Productos
+            </a>
+
+            <a th:href="@{/inventario}" class="enlace-menu activo">
+                <i class="fa-solid fa-right-left"></i>
+                Movimientos
+            </a>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="salir">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Cerrar sesión
+                </button>
+            </form>
+
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <div class="principal">
+
+        <header class="cabecera">
+
+            <h1>
+                <i class="fa-solid fa-file-pdf text-info"></i>
+                Reporte de Movimientos
+            </h1>
+
+            <a th:href="@{/inventario}"
+               class="btn btn-outline-primary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver al Historial
+            </a>
+
+        </header>
+
+        <main class="contenido">
+
+            <section class="tarjeta">
+
+                <h2 class="titulo">Kardex de inventario en PDF</h2>
+
+                <p class="text-secondary">
+                    Elija los filtros y genere el reporte. Si deja un
+                    campo vacío, no se aplica ese filtro.
+                </p>
+
+                <!-- ERROR DEL SERVIDOR -->
+                <div th:if="${mensajeError}"
+                     th:text="${mensajeError}"
+                     class="alert alert-danger">
+                </div>
+
+                <!-- ERROR DEL NAVEGADOR (fechas) -->
+                <div id="errorFechas"
+                     class="alert alert-danger d-none">
+                    La fecha "Desde" no puede ser posterior a "Hasta".
+                </div>
+
+                <form id="formReporte"
+                      th:action="@{/reportes/movimientos/pdf}"
+                      method="get"
+                      target="_blank">
+
+                    <div class="seccion">
+
+                        <h5 class="mb-4">
+                            <i class="fa-solid fa-filter"></i>
+                            Filtros del reporte
+                        </h5>
+
+                        <div class="row g-4">
+
+                            <!-- PRODUCTO -->
+                            <div class="col-md-6">
+
+                                <label for="idProducto" class="form-label">
+                                    Producto
+                                </label>
+
+                                <select id="idProducto"
+                                        name="idProducto"
+                                        class="form-select">
+
+                                    <option value="">Todos los productos</option>
+
+                                    <option th:each="p : ${productos}"
+                                            th:value="${p.idProducto}"
+                                            th:text="${p.codigo + ' - ' + p.nombre}">
+                                        Producto
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- TIPO -->
+                            <div class="col-md-6">
+
+                                <label for="tipo" class="form-label">
+                                    Tipo de movimiento
+                                </label>
+
+                                <select id="tipo"
+                                        name="tipo"
+                                        class="form-select">
+
+                                    <option value="">Todos los tipos</option>
+
+                                    <option th:each="t : ${tipos}"
+                                            th:value="${t}"
+                                            th:text="${t}">
+                                        Tipo
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- DESDE -->
+                            <div class="col-md-6">
+
+                                <label for="desde" class="form-label">
+                                    Desde
+                                </label>
+
+                                <input type="date"
+                                       id="desde"
+                                       name="desde"
+                                       class="form-control">
+
+                            </div>
+
+                            <!-- HASTA -->
+                            <div class="col-md-6">
+
+                                <label for="hasta" class="form-label">
+                                    Hasta
+                                </label>
+
+                                <input type="date"
+                                       id="hasta"
+                                       name="hasta"
+                                       class="form-control">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="botones">
+
+                        <button type="reset"
+                                class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-broom"></i>
+                            Limpiar
+                        </button>
+
+                        <button type="submit" class="btn-generar">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            Generar PDF
+                        </button>
+
+                    </div>
+
+                </form>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const formulario = document.getElementById("formReporte");
+    const desde = document.getElementById("desde");
+    const hasta = document.getElementById("hasta");
+    const aviso = document.getElementById("errorFechas");
+
+    formulario.addEventListener("submit", function (evento) {
+
+        // Las fechas ISO (yyyy-MM-dd) se comparan bien como texto
+        if (desde.value && hasta.value && desde.value > hasta.value) {
+            evento.preventDefault();
+            aviso.classList.remove("d-none");
+        } else {
+            aviso.classList.add("d-none");
+        }
+    });
+});
+</script>
+</body>
+</html>
